@@ -191,7 +191,9 @@ Antes de comenzar el curso, asegúrate de tener:
 - ✅ Registro en Earth Engine completado y aprobado
 - ✅ Earth Engine habilitado para tu proyecto específico (usando la URL con tu proyecto)
 - ✅ Acceso verificado al Code Editor
-- ✅ (Opcional) Python 3.x instalado para los días de Python
+- ✅ (Opcional) Entorno de Python en local, si quieres trabajar fuera del navegador:
+  [`Dia_1/GUIA_ENTORNO.md`](Dia_1/GUIA_ENTORNO.md) lo explica paso a paso. **No hace falta
+  para seguir el curso**: los días de Python se dan en Google Colab
 
 ---
 

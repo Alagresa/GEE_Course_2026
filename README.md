@@ -64,7 +64,7 @@ publicado y usable por otros.
 
 | Día | Fecha | Sesión | Qué se hace |
 |---|---|---|---|
-| [**1**](Dia_1/) | lun 9 nov | Puesta a punto profesional | Cuenta de GEE y Google Cloud, **tipos de cuenta y precios**, GitHub, editores y primeros scripts |
+| [**1**](Dia_1/) | lun 9 nov | Puesta a punto profesional | Cuenta de GEE y Google Cloud, **tipos de cuenta y precios**, GitHub con tu primer *pull request*, conda y VS Code, y primeros scripts |
 | [**2**](Dia_2/) | mar 10 nov | Code Editor a fondo y Python | Series temporales, tendencias, estadísticas zonales y optimización; lo mismo con geemap en Colab |
 | [**3**](Dia_3/) | **jue 12 nov** | Una app en el Code Editor | `ui.*`, publicación y el visor de inundación de la marisma |
 | [**4**](Dia_4/) | **vie 13 nov** | Una app en Python | geemap, cuadros de mando, *machine learning* y despliegue con solara |
@@ -75,9 +75,12 @@ publicado y usable por otros.
 ```
 Dia_N/
 ├── README.md     la guía del día: objetivos, contenidos, ejercicios y recursos
+├── GUIA_*.md     guías de instalación y de uso que se quedan para después del curso
 └── scripts/      el código que se trabaja en clase (.js del Code Editor, .ipynb de Python)
 images/           figuras usadas en los README
-CONFIGURACION.md  puesta a punto de la cuenta, antes de empezar
+CONFIGURACION.md  puesta a punto de la cuenta de Earth Engine, antes de empezar
+environment.yml   el entorno de conda, para quien trabaje en local
+PARTICIPANTES.md  la tabla del primer pull request del curso
 ```
 
 ---

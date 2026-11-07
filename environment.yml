@@ -1,0 +1,48 @@
+# Entorno local del curso «Análisis geoespacial avanzado con Google Earth Engine»
+# CSIC / EBD — 2026
+#
+#   conda env create -f environment.yml
+#   conda activate gee2026
+#
+# No es obligatorio: el curso se puede seguir entero desde el navegador (Code Editor
+# y Google Colab). Esto es para trabajar en local, para la aplicación del día 4 y
+# para después del curso. Ver Dia_1/GUIA_ENTORNO.md.
+
+name: gee2026
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.11
+
+  # Cuadernos
+  - jupyterlab
+  - notebook
+  - ipykernel          # sin esto el entorno no aparece como kernel en VS Code
+
+  # Lo básico de análisis
+  - numpy>=1.26
+  - pandas>=2.0
+  - matplotlib>=3.8
+  - scipy
+
+  # Earth Engine y mapas interactivos
+  - earthengine-api
+  - geemap
+  - ipyleaflet
+  - localtileserver    # para ver rásters locales en el mapa de geemap
+
+  # Vectorial, para cruzar lo de GEE con datos propios
+  - geopandas>=1.0
+  - shapely>=2.0
+  - pyproj>=3.6
+  - fiona>=1.9
+  - rasterio>=1.3
+
+  # Día 4: clasificación y despliegue de la aplicación
+  - scikit-learn
+  - solara
+
+  # Día 5: el repositorio al que se contribuye
+  - ndvi2gif
