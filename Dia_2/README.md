@@ -57,8 +57,8 @@ análisis en Python**, para ver que es la misma herramienta con dos pieles.
 | `mndwi_decades.js` | MNDWI por décadas sobre las lagunas de Doñana |
 | `07_srtm_munis.js` | Estadísticas zonales por municipio |
 | `GEE_CSIC_2025_1.ipynb` | Introducción a geemap |
-| *(por escribir)* `series_rejilla_temporal.js` | Serie mensual bien construida, con huecos declarados |
-| *(por escribir)* `zonales_reduceregions.ipynb` | Lo mismo en Python, con salida a pandas |
+| `series_rejilla_temporal.js` | Rejilla temporal mensual con los huecos declarados, tendencia en unidades/año y estacionalidad armónica |
+| `zonales_reduceregions.ipynb` | `reduceRegions` en Python: reductores combinados y agrupados, salida a pandas y las palancas de memoria y tiempo |
 
 ## ✅ Ejercicio del día
 
