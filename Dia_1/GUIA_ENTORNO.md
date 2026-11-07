@@ -255,12 +255,39 @@ Control*, y es exactamente lo de la [guía de GitHub](GUIA_GITHUB.md) §5.2 con 
 Y pulsando sobre un fichero cambiado se abre el **diff en dos columnas**, lo viejo contra
 lo nuevo. Mirar eso antes de cada *commit* es el mejor hábito que puedes coger hoy.
 
-### VS Code sin instalar nada
+### VS Code sin instalar nada: github.dev
 
-Sobre **cualquier repositorio de GitHub, pulsa la tecla `.`** (el punto). Se abre
-`github.dev`: VS Code completo en el navegador, con ese repositorio cargado, y puedes
-editar, hacer *commit* y abrir un PR desde ahí. No ejecuta código —no hay Python detrás—,
-pero para editar varios ficheros a la vez es una maravilla.
+`github.dev` es **VS Code completo dentro del navegador**, de GitHub, gratis y sin
+instalar nada. No es el truco de `github1s.com`, que es de un tercero y sirve para leer:
+en github.dev puedes **editar, hacer *commit*, crear una rama y abrir un *pull request***,
+y funciona con tus repositorios privados.
+
+Dos formas de abrirlo, y conviene conocer las dos:
+
+1. **La URL** — cambia `github.com` por `github.dev`:
+   ```
+   https://github.dev/Digdgeo/GEE_Course_2026
+   ```
+   Esta funciona siempre. Es la que hay que usar si la otra falla.
+
+2. **La tecla `.`** — pulsa el punto mientras ves un repositorio, una rama, un fichero o
+   un PR, y esa misma pestaña se convierte en el editor, abierto justo donde estabas.
+   Con `>` (`Shift+.`) se abre en una pestaña nueva.
+
+> **Si la tecla `.` no hace nada**, es casi siempre una de estas tres, en este orden:
+> 1. Tienes **desactivados los atajos de una tecla** en tu cuenta:
+>    [github.com/settings/accessibility](https://github.com/settings/accessibility) →
+>    *Keyboard shortcuts* → **«Enable character key shortcuts»**.
+> 2. El **foco estaba en un cuadro de texto** (el buscador de arriba se come la
+>    pulsación). Clic en un hueco vacío de la página y otra vez.
+> 3. **No estás identificado** en esa pestaña.
+>
+> Si la URL del punto 1 tampoco abre el editor, entonces el problema no es la tecla:
+> será la sesión, un bloqueador o la red.
+
+Lo que **no** tiene es terminal ni ejecución: no hay Python ni git de línea de comandos
+detrás, porque no hay máquina, solo el editor. Para editar varios ficheros a la vez y
+dejarlo en un PR es una maravilla; para ejecutar código, VS Code en local.
 
 Pruébalo ahora mismo con el repositorio del curso.
 
@@ -337,7 +364,7 @@ peleando con un entorno, bórralo.
 | Elegir el kernel de un cuaderno | Arriba a la derecha → `Select Kernel` |
 | Terminal dentro de VS Code | `Ctrl+ñ` |
 | Panel de git | `Ctrl+Shift+G` |
-| VS Code en el navegador | Pulsar `.` sobre cualquier repo de GitHub |
+| VS Code en el navegador | `github.com` → `github.dev` en la URL, o pulsar `.` sobre el repo |
 
 ---
 
