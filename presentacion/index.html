@@ -110,6 +110,17 @@ pre .c { color: var(--code-dim); font-style: italic; }
 .aviso { margin-top: 44px; display: inline-block; background: var(--water);
       color: #fff; padding: 14px 24px; border-radius: 10px; font-size: 25px; font-weight: 600; }
 
+/* Banda de logos. Los PNG institucionales tienen fondo blanco opaco, así que
+   en vez de pelearse con ellos se les pone una banda blanca a sangre: sobre el
+   fondo oscuro de la portada queda como un pie deliberado. */
+.logos {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  background: #fff; padding: 22px 96px;
+  display: flex; align-items: center; gap: 46px;
+}
+.logos img { height: 74px; width: auto; display: block; }
+.slide.portada.con-logos, .slide.part.con-logos { padding-bottom: 170px; }
+
 /* Cronograma */
 .crono { display: grid; grid-template-columns: 110px repeat(5, 1fr); gap: 10px; font-size: 21px; }
 .crono .dia { font-family: var(--display); font-size: 25px; text-align: center;
@@ -202,7 +213,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
 <div class="stage" id="stage">
 
 <!-- 1 ---------------------------------------------------------------- -->
-<section class="slide portada" data-title="Portada">
+<section class="slide portada con-logos" data-title="Portada">
   <p style="font-size:24px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 20px;">Gabinete de Formación del CSIC · Estación Biológica de Doñana</p>
   <h1>Análisis geoespacial avanzado con Google Earth Engine</h1>
   <p style="font-size:30px; max-width:1100px;">De una cuenta en blanco a código tuyo publicado y usable por otra persona.</p>
@@ -213,6 +224,11 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
     <div><span>Profesor</span>Diego García Díaz</div>
   </div>
   <div><a class="aviso" href="https://code.earthengine.google.com/" target="_blank" rel="noopener">¿Aún sin cuenta de Earth Engine? Hoy la creamos</a></div>
+  <div class="logos" role="group" aria-label="Instituciones organizadoras">
+    <img src="img/logos/last.png" alt="LAST-EBD · Laboratorio de SIG y Teledetección">
+    <img src="img/logos/ebd.png" alt="Estación Biológica de Doñana">
+    <img src="img/logos/csic.png" alt="CSIC · Consejo Superior de Investigaciones Científicas">
+  </div>
 </section>
 
 <!-- 2 ---------------------------------------------------------------- -->
@@ -803,12 +819,17 @@ ui.root.insert(<span class="n">0</span>, panel);</pre>
 </section>
 
 <!-- 27 --------------------------------------------------------------- -->
-<section class="slide portada" data-title="Cierre">
+<section class="slide portada con-logos" data-title="Cierre">
   <h1>Gracias</h1>
   <p style="font-size:32px; max-width:1050px;">El material se queda publicado, y las dudas se pueden seguir preguntando donde se preguntan las cosas de código: en un <em>issue</em>.</p>
   <div class="meta">
     <div><span>Material</span>github.com/Digdgeo/GEE_Course_2026</div>
     <div><span>Profesor</span>Diego García Díaz · LAST-EBD, CSIC</div>
+  </div>
+  <div class="logos" role="group" aria-label="Instituciones organizadoras">
+    <img src="img/logos/last.png" alt="LAST-EBD · Laboratorio de SIG y Teledetección">
+    <img src="img/logos/ebd.png" alt="Estación Biológica de Doñana">
+    <img src="img/logos/csic.png" alt="CSIC · Consejo Superior de Investigaciones Científicas">
   </div>
 </section>
 
@@ -817,7 +838,7 @@ ui.root.insert(<span class="n">0</span>, panel);</pre>
 <div class="cycle" id="cycle"><div class="done" id="done"></div><div class="mark" id="mark"></div></div>
 </div><!-- /deck -->
 
-<div class="count" id="count">01 / 29</div>
+<div class="count" id="count">01 / 30</div>
 <div class="nav"><button id="nav-prev" title="Anterior">←</button><button id="nav-next" title="Siguiente">→</button></div>
 <div class="ayuda">← →  ·  N notas  ·  F pantalla completa</div>
 <div id="notes"></div>
