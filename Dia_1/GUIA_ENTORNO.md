@@ -362,6 +362,12 @@ instalado** son dos cosas distintas. Casi todos los problemas del primer día so
 > VS Code recuerda el intérprete **por carpeta**, no globalmente. Cada proyecto nuevo
 > vuelve a pedirlo: es a propósito, y es lo que quieres.
 
+> **Y no, que conda no esté en el PATH no estorba aquí.** VS Code no busca los entornos en
+> el PATH: lee `~/.conda/environments.txt`, que conda escribe solo cada vez que creas uno,
+> y mira en las carpetas donde Miniconda se instala normalmente. Al ejecutar llama directo
+> a `...\envs\gee2026\python.exe`. Lo único que sí necesita el PATH es la terminal de
+> dentro, y de eso va la nota del final de este apartado.
+
 ### Cuadernos
 
 Abre cualquier `.ipynb` del curso y se ve igual que en Colab, pero local.
@@ -495,6 +501,10 @@ de una versión a otra.
 | **Windows**: `git: command not found` o VS Code dice que no encuentra git | git no está instalado, que es otro programa | [git-scm.com/download/win](https://git-scm.com/download/win) (§3) |
 | **Windows**: el entorno se crea a medias, o «fichero en uso» | La carpeta está sincronizada con OneDrive | Mueve el trabajo fuera de `Documentos`/`Escritorio` (§1) |
 | **Windows**: errores raros de rutas en `rasterio` o `fiona` | Acentos, espacios o rutas de más de 260 caracteres | Ruta corta y sin acentos, tipo `C:\gee` (§1) |
+| `gee2026` no sale en `Select Interpreter` | Miniconda no está en una carpeta de las
+habituales. **No es por el PATH** | `Ctrl+Shift+P` → `Python: Select Interpreter` → **Enter
+interpreter path** → apunta a `...\envs\gee2026\python.exe`. Si acabas de crear el entorno,
+antes prueba `Developer: Reload Window` |
 | `ModuleNotFoundError` con el paquete instalado | El editor mira a otro Python | `Python: Select Interpreter` → `gee2026` (§3) |
 | El kernel `gee2026` no sale en la lista del cuaderno | Falta `ipykernel` en el entorno | `conda activate gee2026 && conda install ipykernel` |
 | El kernel no sale, pero `ipykernel` está puesto | Lanzaste JupyterLab desde otro entorno | Lánzalo desde `gee2026`, o registra el kernel (§2) |
