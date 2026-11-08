@@ -41,6 +41,15 @@ Se monta entre todos una aplicación de verdad, la que se usa en el LAST-EBD red
 que cabe en una mañana: selector de fecha, máscara de inundación sobre la ortofoto,
 cortinilla para comparar dos fechas y una gráfica de superficie inundada.
 
+**Segundo caso, de repuesto: [`algas_embalses_base.js`](scripts/algas_embalses_base.js).**
+Afloramientos de algas en embalses andaluces. El análisis está escrito y comentado, y la
+interfaz **no**: eso es justamente el ejercicio. Se usa si el visor de inundación sale más
+rápido de lo previsto, o como alternativa para quien prefiera un caso que no sea Doñana.
+El propio script termina con la lista de qué `ui.*` va en cada sitio.
+
+Se monta en este orden a propósito —primero el análisis, luego la interfaz—, que es el que
+nunca se sigue y el que evita descubrir que lo que ibas a envolver no funcionaba.
+
 ## 💻 Scripts del día
 
 | Script | Qué enseña |
@@ -49,6 +58,7 @@ cortinilla para comparar dos fechas y una gráfica de superficie inundada.
 | *(por escribir)* `app_02_selector_fechas.js` | Selector de fecha y capa que se actualiza |
 | *(por escribir)* `app_03_splitpanel.js` | Comparar dos fechas con cortinilla |
 | *(por escribir)* `app_04_inundacion.js` | El visor completo |
+| [`algas_embalses_base.js`](scripts/algas_embalses_base.js) | **El análisis antes de la interfaz**: afloramientos de algas en seis embalses andaluces, con NDCI y FAI sobre la lámina de agua del JRC. Sin un solo `ui.*` |
 
 ## ✅ Ejercicio del día
 
