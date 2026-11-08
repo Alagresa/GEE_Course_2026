@@ -471,7 +471,8 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
         <li>La aplicación del día 4 hay que servirla.</li>
         <li>Colab se apaga a las doce horas y se lleva lo que no hayas guardado.</li>
       </ul>
-      <p><strong>Miniconda antes que Anaconda</strong>: debajo de <code>geopandas</code> y <code>rasterio</code> hay GDAL, PROJ y GEOS, que son C y hay que compilar. conda instala los dos lados; <code>pip</code> no sabe de eso.</p>
+      <p><strong>Por qué conda y no <code>pip</code></strong>: debajo de <code>geopandas</code> y <code>rasterio</code> hay GDAL, PROJ y GEOS, que son C y hay que compilar. conda instala los dos lados; <code>pip</code> no sabe de eso.</p>
+      <p><strong>Y de los tres instaladores, <a href="https://github.com/conda-forge/miniforge">Miniforge</a></strong>: viene apuntando a conda-forge, que es donde está el geoespacial, y es BSD — sin los términos de uso que Anaconda aplica a las organizaciones de más de 200 empleados.</p>
     </div>
     <div>
       <pre><span class="c"># el entorno del curso, de una vez</span>

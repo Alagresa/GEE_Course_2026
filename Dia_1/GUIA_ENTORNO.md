@@ -24,7 +24,7 @@ a partir de ahora, no solo para GEE.
 
 ---
 
-## 1. conda: por qué, y Anaconda contra Miniconda
+## 1. conda: por qué, y cuál de los tres instalar
 
 El problema que resuelve conda es viejo y muy concreto: **el geoespacial en Python no es
 Python**. Debajo de `geopandas` y `rasterio` hay librerías escritas en C —GDAL, PROJ,
@@ -35,60 +35,73 @@ sí. `pip` no sabe nada de eso, y de ahí vienen las tardes perdidas con
 conda instala **los dos lados**: el paquete de Python y las librerías de sistema que
 necesita, ya compiladas. Por eso en geoespacial se usa conda y no otra cosa.
 
-| | Anaconda | **Miniconda** |
-|---|---|---|
-| Tamaño | ~3 GB | ~100 MB |
-| Trae | Python + 300 librerías + interfaz gráfica | Solo Python + conda |
-| Para | Quien quiere todo puesto y no mirar más | **Quien quiere un entorno por proyecto** |
+Lo que no está tan claro es **cuál de los tres instaladores** usar, porque los tres traen
+el mismo `conda`:
 
-**Usa Miniconda.** Lo de Anaconda es cómodo el primer día y estorba el resto: 300
-librerías que no vas a usar, y la tentación de trabajar en el entorno `base`, que es el
-origen del 90 % de los problemas de este mundo. Si ya tienes Anaconda instalado, no lo
-desinstales: `conda` es el mismo y todo lo de aquí funciona igual.
+| | Anaconda | Miniconda | **Miniforge** |
+|---|---|---|---|
+| Tamaño | ~3 GB | ~100 MB | ~100 MB |
+| Trae | Python + 300 librerías + interfaz gráfica | Python + conda | Python + conda + mamba |
+| Canal por defecto | el de Anaconda Inc. | el de Anaconda Inc. | **conda-forge** |
+| Licencia | de Anaconda Inc. | de Anaconda Inc. | **BSD, de la comunidad** |
 
-> Existe también **mamba**, que es conda reescrito para resolver dependencias mucho más
-> rápido (`mamba install` en vez de `conda install`, mismo resto). Las versiones nuevas de
-> conda ya traen ese resolvedor dentro, así que no hace falta — pero si ves `mamba` en una
-> guía por ahí, es esto.
+**Instala Miniforge.** Es el instalador que mantiene la propia comunidad de conda-forge, y
+resuelve de una vez las dos cosas que importan aquí:
+
+- **El canal.** Miniforge ya viene apuntando a conda-forge, que es donde está el
+  geoespacial bueno y actualizado. Con Miniconda hay que acordarse del `-c conda-forge`
+  cada vez, y mezclar los dos canales dentro de un mismo entorno es una de las formas más
+  fiables de romperlo.
+- **La licencia.** Anaconda cobra por el uso de su repositorio a las organizaciones de más
+  de 200 empleados, y desde julio de 2025 el instalador de Miniconda pide aceptar esos
+  términos por la terminal. Hay una excepción para el ámbito académico, redactada de
+  varias maneras distintas según el año, y el CSIC son más de diez mil personas: no es una
+  discusión que merezca la pena tener cuando el camino alternativo es libre, gratuito y
+  además mejor. Miniforge es BSD y no toca el repositorio de Anaconda.
+
+Y de paso se quita lo peor de Anaconda: 300 librerías que no vas a usar y la tentación de
+trabajar en el entorno `base`, que es el origen del 90 % de los problemas de este mundo.
+
+> **Si ya tienes Anaconda o Miniconda instalado y funcionando, no lo desinstales.** `conda`
+> es el mismo programa y todo lo de esta guía te vale igual; asegúrate solo de que tus
+> entornos declaran `conda-forge` como canal —el `environment.yml` del curso lo hace— y de
+> instalar siempre con `-c conda-forge`.
+
+> Miniforge trae también **mamba**: el mismo conda con el resolvedor de dependencias
+> reescrito en C++ y mucho más rápido (`mamba install` en vez de `conda install`, el resto
+> idéntico). Las versiones nuevas de conda ya llevan ese resolvedor dentro, así que no
+> hace falta usarlo — pero si ves `mamba` en una guía por ahí, es esto.
 
 ### Instalación
 
+Todo sale de la misma página de descargas:
+[github.com/conda-forge/miniforge](https://github.com/conda-forge/miniforge#download).
+
 **Windows**
 
-1. Descarga el instalador de
-   [Miniconda](https://www.anaconda.com/download/success) (sección *Miniconda
-   Installers*, Windows 64-bit).
+1. Descarga
+   [`Miniforge3-Windows-x86_64.exe`](https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe).
 2. Ejecuta el `.exe`. Dos opciones importan:
-   - **Instalar solo para el usuario actual** — no pide administrador.
-   - **NO marcar «Add Miniconda to my PATH»**. Parece lo cómodo y rompe cosas: deja a
-     conda por delante del Python del sistema y de cualquier otro que tengas. Usarás el
-     **Anaconda Prompt** en su lugar.
-3. Abre **Anaconda Prompt** desde el menú de inicio. Esa es tu terminal para conda, no el
+   - **Instalar solo para el usuario actual** — así no pide administrador.
+   - **NO marcar «Add Miniforge to my PATH»**. Parece lo cómodo y rompe cosas: deja a conda
+     por delante del Python del sistema y de cualquier otro que tengas. Usarás el
+     **Miniforge Prompt** en su lugar.
+3. Abre **Miniforge Prompt** desde el menú de inicio. Esa es tu terminal para conda, no el
    `cmd` normal.
 
-**macOS**
+**macOS y Linux**
+
+Las dos líneas son las mismas en los dos sistemas: `uname` resuelve solo el sistema y la
+arquitectura, así que esto vale igual para un Mac con Apple Silicon, uno con Intel, un
+Linux normal y un Linux ARM.
 
 ```bash
-# Apple Silicon (M1/M2/M3/M4) — la mayoría de los Mac actuales
-curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
-bash Miniconda3-latest-MacOSX-arm64.sh
-
-# Intel
-curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-bash Miniconda3-latest-MacOSX-x86_64.sh
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh
 ```
 
-Acepta la licencia, deja la ruta por defecto (`~/miniconda3`) y **di sí a que inicialice
+Acepta la licencia, deja la ruta por defecto (`~/miniforge3`) y **di sí a que inicialice
 tu shell**. Después, cierra y abre la terminal.
-
-**Linux**
-
-```bash
-curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-```
-
-Igual: licencia, ruta por defecto, sí a la inicialización, y reabre la terminal.
 
 **Comprobar**
 
@@ -98,7 +111,7 @@ conda --version
 ```
 
 Si dice «command not found», cierra y abre la terminal otra vez. Si sigue, en Windows
-estás en el `cmd` en lugar del Anaconda Prompt.
+estás en el `cmd` en lugar del Miniforge Prompt.
 
 ---
 
@@ -149,6 +162,14 @@ conda env update -f environment.yml --prune # actualizar si cambia el fichero
 conda env remove -n gee2026                 # borrarlo y empezar de cero
 ```
 
+Y tres más que hacen falta antes o después, siempre con el entorno activo:
+
+```bash
+conda list                  # qué hay instalado aquí, y en qué versión
+conda update nombre         # subir un paquete de versión
+conda remove nombre         # quitarlo
+```
+
 `-c conda-forge` es el canal: **conda-forge** es el repositorio comunitario, más
 actualizado y con muchísimo más geoespacial que el canal por defecto. En el
 `environment.yml` ya va declarado, así que dentro del entorno del curso puedes omitirlo.
@@ -172,6 +193,58 @@ Puedes usar los dos, y a veces hay que hacerlo. Lo que hay que saber:
 
 Regla práctica: **conda siempre que puedas, pip como último recurso, y nunca los dos para
 el mismo paquete.**
+
+### Tu propio `environment.yml`
+
+Esto es lo que querrás hacer con tu trabajo en cuanto pase el curso: que cualquiera
+—incluido tú mismo dentro de dos años, o en otro ordenador— pueda recrear el entorno en el
+que funcionaba tu análisis.
+
+```bash
+conda env export > environment.yml                 # versiones exactas de todo
+conda env export --from-history > environment.yml  # solo lo que pediste tú
+```
+
+La diferencia importa. El primero clava las versiones de los cientos de paquetes que conda
+instaló por debajo, con la compilación concreta de **tu** sistema: es lo que quieres para
+poder reproducir un resultado publicado, y es lo que normalmente **no** funciona en el
+ordenador de otro si cambia de sistema operativo. El segundo guarda solo las líneas que
+escribiste tú, y es el que se pone en un repositorio.
+
+En un artículo, lo honrado es dar los dos: el `--from-history` para que se pueda instalar,
+y el completo como anexo para que se pueda auditar.
+
+### Cuadernos fuera de VS Code: JupyterLab y los kernels
+
+Si en vez de VS Code prefieres **JupyterLab** en el navegador, lo más simple es lanzarlo
+desde dentro del entorno, y entonces no hay nada que configurar:
+
+```bash
+conda activate gee2026
+jupyter lab
+```
+
+El problema aparece cuando lanzas `jupyter lab` desde `base`, o desde otro entorno, y el
+kernel de `gee2026` no sale en la lista. Un **kernel** es el Python que ejecuta el
+cuaderno, y Jupyter solo ve los que tiene registrados. Dos formas de arreglarlo:
+
+```bash
+# A) una vez en base, y a partir de ahí aparecen todos los entornos solos
+conda activate base
+conda install -c conda-forge nb_conda_kernels
+
+# B) registrar un entorno concreto, sin tocar base
+conda activate gee2026
+python -m ipykernel install --user --name gee2026 --display-name "Python (gee2026)"
+```
+
+La A es más cómoda si vas a tener varios entornos; la B, si eres de los que no quieren
+instalar nada en `base`. En los dos casos el entorno necesita `ipykernel`, que el
+`environment.yml` del curso ya trae.
+
+**Y la regla de siempre, que vale aquí y en VS Code:** manda el kernel que está
+seleccionado arriba a la derecha del cuaderno, no el entorno desde el que lanzaste
+Jupyter. Son cosas distintas y se parecen demasiado.
 
 ---
 
@@ -336,9 +409,11 @@ de una versión a otra.
 
 | Lo que ves | Qué pasa | Arreglo |
 |---|---|---|
-| `conda: command not found` | La terminal no conoce conda | Reabre la terminal. En Windows, usa el **Anaconda Prompt** |
+| `conda: command not found` | La terminal no conoce conda | Reabre la terminal. En Windows, usa el **Miniforge Prompt** (o el Anaconda Prompt, si vienes de Miniconda) |
 | `ModuleNotFoundError` con el paquete instalado | El editor mira a otro Python | `Python: Select Interpreter` → `gee2026` (§3) |
 | El kernel `gee2026` no sale en la lista del cuaderno | Falta `ipykernel` en el entorno | `conda activate gee2026 && conda install ipykernel` |
+| El kernel no sale, pero `ipykernel` está puesto | Lanzaste JupyterLab desde otro entorno | Lánzalo desde `gee2026`, o registra el kernel (§2) |
+| `Solving environment` eterno, o versiones viejas de todo | El entorno mezcla conda-forge y el canal de Anaconda | Declara solo `conda-forge`, o reinstala con **Miniforge** (§1) |
 | `conda env create` lleva veinte minutos | Normal la primera vez | Esperar. Si pasa de media hora, `Ctrl+C` y repetir |
 | `PackagesNotFoundError` | El paquete no está en los canales declarados | `conda install -c conda-forge nombre`, y si no está, `pip install nombre` |
 | `EEException: Earth Engine client library not initialized` | Falta `ee.Initialize(project=...)` | Añádelo, con **tu** ID de proyecto |
@@ -362,6 +437,8 @@ peleando con un entorno, bórralo.
 | Borrar y empezar de cero | `conda env remove -n gee2026` |
 | Elegir el Python de VS Code | `Ctrl+Shift+P` → `Python: Select Interpreter` |
 | Elegir el kernel de un cuaderno | Arriba a la derecha → `Select Kernel` |
+| Abrir JupyterLab en el navegador | `conda activate gee2026 && jupyter lab` |
+| Compartir tu entorno | `conda env export --from-history > environment.yml` |
 | Terminal dentro de VS Code | `Ctrl+ñ` |
 | Panel de git | `Ctrl+Shift+G` |
 | VS Code en el navegador | `github.com` → `github.dev` en la URL, o pulsar `.` sobre el repo |
@@ -371,7 +448,8 @@ peleando con un entorno, bórralo.
 ## 7. Para profundizar
 
 - [Guía de conda](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html) · [Hoja de referencia oficial](https://docs.conda.io/projects/conda/en/stable/user-guide/cheatsheet.html)
-- [conda-forge](https://conda-forge.org/) — el canal donde está el geoespacial
+- [conda-forge](https://conda-forge.org/) — el canal donde está el geoespacial · [Miniforge](https://github.com/conda-forge/miniforge) — el instalador que lo trae puesto
+- [Términos de uso del repositorio de Anaconda](https://www.anaconda.com/legal) — por si tienes que justificar la decisión del §1 en tu centro
 - [Python en VS Code](https://code.visualstudio.com/docs/python/python-tutorial) · [Cuadernos en VS Code](https://code.visualstudio.com/docs/datascience/jupyter-notebooks)
 - [Instalación de la API de Python de GEE](https://developers.google.com/earth-engine/guides/python_install)
 - [geemap](https://geemap.org/) · [Tutoriales en vídeo](https://geemap.org/tutorials/)
