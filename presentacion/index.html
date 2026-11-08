@@ -121,6 +121,25 @@ pre .c { color: var(--code-dim); font-style: italic; }
 .logos img { height: 74px; width: auto; display: block; }
 .slide.portada.con-logos, .slide.part.con-logos { padding-bottom: 170px; }
 
+/* Ajuste de densidad: solo en las diapositivas que se salían por abajo.
+   Medido con el script de /tmp: el suelo seguro es y=828 (900 - 72 de padding). */
+.slide.dens .eyebrow { margin-bottom: 30px; }
+.slide.dens p { margin: 0 0 15px; }
+.slide.dens li { margin-bottom: 10px; }
+.slide.dens ul { margin-bottom: 15px; }
+.slide.fuerte h2 { font-size: 48px; margin-bottom: 24px; }
+.slide.fuerte h3 { font-size: 27px; margin-bottom: 11px; }
+.slide.fuerte p, .slide.fuerte li { font-size: 24px; line-height: 1.42; }
+.slide.fuerte table { font-size: 21px; }
+.slide.fuerte .panel { padding: 20px 24px; }
+.slide.fuerte pre { font-size: 20px; }
+.slide.fuerte .alumnos { font-size: 22px; gap: 9px 20px; }
+.slide.fuerte .alumnos div { padding: 8px 14px; }
+.slide.fuerte .alumnos .rel { font-size: 18px; }
+.slide.fuerte .cifras { gap: 22px; margin-bottom: 22px; }
+.slide.fuerte .cifra { padding: 18px 22px; }
+.slide.fuerte .cifra b { font-size: 46px; }
+
 /* Cronograma */
 .crono { display: grid; grid-template-columns: 96px repeat(5, 1fr); gap: 9px; font-size: 20px; }
 .crono .dia { font-family: var(--display); font-size: 25px; text-align: center;
@@ -301,7 +320,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
 </section>
 
 <!-- 4 ---------------------------------------------------------------- -->
-<section class="slide" id="s-alumnos" data-title="Quién está en el aula">
+<section class="slide dens fuerte" id="s-alumnos" data-title="Quién está en el aula">
   <div class="eyebrow"><span>Presentación</span><span>El aula</span></div>
   <h2>Quién está aquí</h2>
   <div class="body">
@@ -336,7 +355,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
 </section>
 
 <!-- 6 ---------------------------------------------------------------- -->
-<section class="slide" data-title="Qué es Earth Engine">
+<section class="slide dens fuerte" data-title="Qué es Earth Engine">
   <div class="eyebrow"><span>Día 1</span><span>Qué es Earth Engine</span></div>
   <h2>Un catálogo, unos servidores y una API</h2>
   <div class="cifras">
@@ -426,7 +445,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
 </section>
 
 <!-- 1.6 -------------------------------------------------------------- -->
-<section class="slide" id="s-docs" data-title="La documentación">
+<section class="slide dens" id="s-docs" data-title="La documentación">
   <div class="eyebrow"><span>Día 1</span><span>La documentación</span></div>
   <h2>Nadie se sabe la API: hay que saber dónde se mira</h2>
   <div class="body">
@@ -439,7 +458,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
       <a href="https://developers.google.com/earth-engine/tutorials/tutorials" target="_blank" rel="noopener"><b>Tutoriales</b><span>Recorridos completos, de la pregunta al mapa: la pregunta, el filtro, el reductor y la figura</span></a>
       <a href="https://groups.google.com/g/google-earth-engine-developers" target="_blank" rel="noopener"><b>Dónde preguntar</b><span>El grupo de desarrolladores, con quince años de hilos: casi todo lo que te pase le ha pasado antes a alguien</span></a>
     </div>
-    <p class="rel" style="margin-top:24px;">Y la que está dentro: la pestaña <strong>Docs</strong> del Code Editor, al lado de <em>Scripts</em>, trae la referencia completa y buscable sin salir de la ventana — es la que se acaba usando de verdad. Para marcadores de hoy: <a href="https://developers.google.com/earth-engine/guides/debugging" target="_blank" rel="noopener">debugging</a>, para cuando no sale, y <a href="https://developers.google.com/earth-engine/guides/best_practices" target="_blank" rel="noopener">best practices</a>, para cuando sale pero tarda.</p>
+    <p class="rel" style="margin-top:16px;">Y la que está dentro: la pestaña <strong>Docs</strong> del Code Editor, al lado de <em>Scripts</em>, trae la referencia completa y buscable sin salir de la ventana — es la que se acaba usando de verdad. Para marcadores de hoy: <a href="https://developers.google.com/earth-engine/guides/debugging" target="_blank" rel="noopener">debugging</a>, para cuando no sale, y <a href="https://developers.google.com/earth-engine/guides/best_practices" target="_blank" rel="noopener">best practices</a>, para cuando sale pero tarda.</p>
   </div>
 </section>
 
@@ -463,7 +482,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
 </section>
 
 <!-- 8 ---------------------------------------------------------------- -->
-<section class="slide" data-title="GitHub">
+<section class="slide dens fuerte" data-title="GitHub">
   <div class="eyebrow"><span>Día 1</span><span>GitHub</span></div>
   <h2>Cinco palabras y un <em>pull request</em> antes de comer</h2>
   <div class="cols izq">
@@ -488,7 +507,7 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
 </section>
 
 <!-- 9 ---------------------------------------------------------------- -->
-<section class="slide" data-title="conda y VS Code">
+<section class="slide dens fuerte" data-title="conda y VS Code">
   <div class="eyebrow"><span>Día 1</span><span>El entorno local</span></div>
   <h2>El curso se puede seguir sin instalar nada. Esto es para cuando no basta</h2>
   <div class="cols">
@@ -516,7 +535,7 @@ conda activate gee2026</pre>
 </section>
 
 <!-- 10 --------------------------------------------------------------- -->
-<section class="slide" id="s-cliente" data-title="Cliente y servidor">
+<section class="slide dens" id="s-cliente" data-title="Cliente y servidor">
   <div class="eyebrow"><span>Día 1</span><span>El concepto que lo explica todo</span></div>
   <h2>Por qué <code>ee.Number(3)</code> no es un 3</h2>
   <div class="cols">
@@ -621,7 +640,7 @@ ee.Algorithms.If(b.gt(<span class="n">5</span>), ... );</pre>
 </section>
 
 <!-- 15 --------------------------------------------------------------- -->
-<section class="slide" id="s-trampa" data-title="La trampa del escalado">
+<section class="slide dens" id="s-trampa" data-title="La trampa del escalado">
   <div class="eyebrow"><span>Día 2</span><span>La trampa</span></div>
   <h2>El error que no da ningún error</h2>
   <div class="cols">
@@ -811,7 +830,7 @@ ui.root.insert(<span class="n">0</span>, panel);</pre>
 </section>
 
 <!-- 26 --------------------------------------------------------------- -->
-<section class="slide enlaces" id="s-recursos" data-title="Recursos">
+<section class="slide dens enlaces" id="s-recursos" data-title="Recursos">
   <div class="eyebrow"><span>Cierre</span><span>Recursos</span></div>
   <h2>Para seguir solo</h2>
   <div class="enlaces body">
