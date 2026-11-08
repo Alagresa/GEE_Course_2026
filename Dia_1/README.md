@@ -53,7 +53,8 @@ contribuir a un repositorio de verdad**.
 - Las cinco palabras —repositorio, *commit*, rama, *fork*, *pull request*— explicadas con
   el repositorio de este curso delante, no en abstracto.
 - **El PR de hoy, hecho en clase y entero desde el navegador**: tu línea en
-  `PARTICIPANTES.md`. Sin git, sin terminal, sin editor. GitHub hace el *fork* solo.
+  `PARTICIPANTES.md`, cada uno en su hueco. Sin git, sin terminal, sin editor. GitHub hace
+  el *fork* solo.
 - Qué pasa después: revisión, cambios pedidos sobre la misma rama, *merge*, borrar la rama.
 - Y lo mismo en local, para quien quiera: autenticación (la contraseña ya no vale: token o
   SSH) y el ciclo de cinco comandos.
@@ -121,7 +122,8 @@ Y ya con el pie en el nivel del curso: no «esto es un mapa», sino **cómo pien
 
 1. Cuenta de Earth Engine activa y un script propio guardado y compartido.
 2. Cuenta de GitHub creada y **un *pull request* al repositorio del curso**, añadiendo tu
-   nombre y tu usuario a [`PARTICIPANTES.md`](../PARTICIPANTES.md). Es un PR de una línea:
+   nombre y tu usuario a [`PARTICIPANTES.md`](../PARTICIPANTES.md), **en un hueco libre y
+   tocando solo esa línea**. Es un PR de una línea:
    lo importante es haber recorrido el flujo entero una vez. El paso a paso está en
    [GUIA_GITHUB.md](GUIA_GITHUB.md) §4.
 3. **Opcional, y se puede terminar en casa**: el entorno `gee2026` creado y la celda de

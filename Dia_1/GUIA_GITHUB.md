@@ -128,12 +128,12 @@ Esto es el ejercicio del día. **Se hace entero desde el navegador**: no hace fa
 terminal, ni editor. Son nueve clics y conviene hacerlos despacio una vez, porque es el
 mismo camino que seguirás luego para cosas grandes.
 
-Vas a añadir tu línea al fichero `PARTICIPANTES.md` de este repositorio.
+Vas a rellenar tu hueco en el fichero `PARTICIPANTES.md` de este repositorio.
 
 ### 4.1. Abre el fichero
 
-Entra en el repositorio del curso y haz clic en **`PARTICIPANTES.md`**. Verás una tabla
-con una fila ya puesta, la mía.
+Entra en el repositorio del curso y haz clic en **`PARTICIPANTES.md`**. Verás el hueco
+**00** ya relleno —el mío— y dieciséis huecos numerados vacíos debajo.
 
 ### 4.2. Dale al lápiz
 
@@ -147,18 +147,22 @@ Eso es GitHub **haciéndote el *fork* solo**. No tienes permiso de escritura en 
 repositorio —y es correcto que no lo tengas—, así que te crea tu copia y te deja editar
 ahí. Es el mismo *fork* del día 5, hecho por el camino corto.
 
-### 4.3. Escribe tu línea
+### 4.3. Rellena tu hueco
 
-Añade una fila a la tabla, **en orden alfabético por nombre**, copiando el formato de la
-que ya está:
+**Coge un hueco vacío, el que quieras**, y escribe en su línea —sin tocar ninguna otra—
+copiando el formato del 00:
 
 ```markdown
-| Nombre Apellido | [@tuusuario](https://github.com/tuusuario) | Lo que te gustaría llevarte del curso |
+**07.** Nombre Apellido · [@tuusuario](https://github.com/tuusuario) · Lo que te gustaría llevarte del curso
 ```
 
-La tercera columna no es relleno: la leeré antes del día 2 para ajustar los ejemplos a lo
-que haya pedido la gente. Sé concreto — «series temporales de NDVI en mis parcelas» sirve
-mucho más que «aprender GEE».
+Lo tercero no es relleno: lo leeré antes del día 2 para ajustar los ejemplos a lo que haya
+pedido la gente. Sé concreto — «series temporales de NDVI en mis parcelas» sirve mucho más
+que «aprender GEE».
+
+> **Y la única regla:** toca **solo tu línea**. No reordenes, no quites huecos vacíos, no
+> arregles nada de nadie. Si cambias líneas que no son tuyas, tu *pull request* choca con
+> el de otro y hay que resolverlo a mano (§4.7).
 
 ### 4.4. *Commit changes...*
 
@@ -205,6 +209,42 @@ Te llegará un correo cuando lo revise. Pueden pasar tres cosas, y las tres son 
 
 Cuando se acepte, GitHub te ofrecerá **borrar la rama**. Bórrala: ya cumplió. Tu *commit*
 no se va con ella.
+
+### 4.7. Si GitHub te dice que hay un conflicto
+
+Puede pasar, y **no has roto nada**: significa que alguien cogió tu mismo hueco antes de
+que entrara tu PR, y git no sabe cuál de los dos quieres. Tiene arreglo en un minuto y lo
+haces tú, desde el navegador:
+
+1. En tu *pull request*, abajo, verás **«This branch has conflicts that must be resolved»**.
+   Pulsa **Resolve conflicts**.
+2. Se abre un editor con tu fichero y, en la zona del choque, unas marcas que git escribe
+   para enseñarte las dos versiones:
+
+   ```
+   <<<<<<< main
+   **07.** Ana López · [@analopez](https://github.com/analopez) · Series temporales
+   =======
+   **07.** Bruno Ruiz · [@bruno](https://github.com/bruno) · Clasificación
+   >>>>>>> anade-bruno-ruiz
+   ```
+
+   Arriba, entre `<<<<<<<` y `=======`, lo que ya está en `main`. Abajo, entre `=======` y
+   `>>>>>>>`, lo tuyo.
+3. **Deja el fichero como quieres que quede y borra las tres líneas de marcas.** Aquí, lo
+   razonable: la línea del otro se queda en el 07 y la tuya se va a un hueco libre.
+
+   ```
+   **07.** Ana López · [@analopez](https://github.com/analopez) · Series temporales
+   ```
+
+   ...y tu línea, en el hueco vacío que elijas más abajo.
+4. **Mark as resolved** → **Commit merge**. El PR vuelve a estar limpio y ya se puede
+   aceptar.
+
+**Resolver un conflicto es exactamente esto**: decidir tú lo que la máquina no puede
+decidir, y quitar las marcas. No es un error del sistema ni una avería; es git negándose a
+inventar.
 
 ---
 

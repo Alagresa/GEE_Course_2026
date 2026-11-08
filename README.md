@@ -89,7 +89,7 @@ presentacion/     las diapositivas del curso, publicadas en GitHub Pages
 images/           figuras usadas en los README
 CONFIGURACION.md  puesta a punto de la cuenta de Earth Engine, antes de empezar
 environment.yml   el entorno de conda, para quien trabaje en local
-PARTICIPANTES.md  la tabla del primer pull request del curso
+PARTICIPANTES.md  los huecos del primer pull request del curso
 ```
 
 ---
