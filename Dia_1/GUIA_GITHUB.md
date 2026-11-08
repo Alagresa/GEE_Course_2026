@@ -359,7 +359,20 @@ nunca**. Se sube la que termina en `.pub`.
 
 **¿Funciona igual en Windows, Linux y Mac?** Sí. `ssh-keygen` es el mismo programa en los
 tres: Windows 10 y 11 traen OpenSSH de serie, así que vale en PowerShell, en cmd y en Git
-Bash sin instalar nada. Lo único que cambia es cómo leer el fichero para copiarlo:
+Bash sin instalar nada.
+
+> **En Windows, hazlo en Git Bash.** Las tres valen, pero en Git Bash el comando y las
+> rutas son idénticos a los de Mac y Linux —`~/.ssh/id_ed25519.pub`, con barras normales—,
+> así que puedes seguir cualquier tutorial sin traducir nada. Y viene con git, que ya lo
+> tienes instalado.
+>
+> Un detalle por si algún día te desconcierta: Git Bash trae **su propio `ssh`**, distinto
+> del de Windows. La clave es la misma para los dos, porque los dos usan
+> `C:\Users\tu-usuario\.ssh`; lo que no se comparte es el `ssh-agent`, así que un
+> `ssh-add` hecho en Git Bash no lo ve PowerShell. Solo importa si le pusiste contraseña a
+> la clave.
+
+Lo único que cambia es cómo leer el fichero para copiarlo:
 
 | | Leer la clave pública | Copiarla al portapapeles |
 |---|---|---|
