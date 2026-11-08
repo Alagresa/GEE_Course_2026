@@ -68,9 +68,15 @@ un segundo y se tira cuando se ha usado.
 5. Mientras estás ahí: **Settings → Emails → «Keep my email addresses private»**. Si no,
    tu correo queda visible en el historial público de cada *commit* que hagas.
 
-Y pide la **cuenta académica**: [education.github.com](https://education.github.com/)
-reconoce el correo institucional y da gratis los repositorios privados sin límite y el
-Copilot, que de otro modo se pagan.
+Y si te corresponde, pide la **cuenta académica**:
+[education.github.com](https://education.github.com/) reconoce el correo institucional. Ojo
+con qué da y qué no: **los repositorios privados ya son gratis para todo el mundo** desde
+2020, así que eso no es la ventaja. Lo que aporta es **Copilot Pro sin pagar**, las
+funciones de GitHub Pro y una tanda de ofertas de terceros. Hay dos vías, *Student* y
+*Teacher*, y las dos piden **justificar la condición** —matrícula o contrato docente—, así
+que no es un trámite de un minuto ni se aprueba al instante: puede tardar días. Si estás de
+predoctoral entras por *Student*; si no das clase ni estás matriculado, probablemente no
+te corresponda, y no pasa nada: **nada de este curso lo necesita**.
 
 ---
 
