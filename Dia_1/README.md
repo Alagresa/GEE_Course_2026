@@ -67,6 +67,13 @@ este bloque no es un requisito. Es para los tres casos en que el navegador se qu
 corto: tus datos no están en la nube, la aplicación del día 4 hay que servirla, y Colab
 se apaga a las doce horas y se lleva lo que no hayas guardado.
 
+> **git y GitHub no son lo mismo**, y es la confusión más común: git es un programa que va
+> en tu ordenador y hay que instalar; GitHub es la web donde se guardan los repositorios.
+> Se puede usar GitHub sin git —el PR de hoy se hace entero desde el navegador— y git sin
+> GitHub. Y **tener cuenta no instala git**: en Windows no viene puesto.
+> Está en [GUIA_GITHUB.md](GUIA_GITHUB.md) §2 y se instala en
+> [GUIA_ENTORNO.md](GUIA_ENTORNO.md) §3.
+
 **Guía del bloque: [GUIA_ENTORNO.md](GUIA_ENTORNO.md)** — instalación y solución de
 problemas, para seguirla en casa con calma.
 

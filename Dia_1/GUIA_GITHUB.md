@@ -32,6 +32,35 @@ existir**. Hay un fichero y su historia.
 
 ## 2. Las cinco palabras
 
+### Antes de las cinco: git y GitHub no son lo mismo
+
+Es la confusión más común de todas, y deshacerla cuesta diez segundos. **Son dos cosas
+distintas, de autores distintos y de épocas distintas:**
+
+| | Qué es | Dónde está |
+|---|---|---|
+| **git** | Un **programa** que lleva la cuenta de los cambios de una carpeta. Lo escribió Linus Torvalds en 2005 para el núcleo de Linux | **En tu ordenador**, y hay que instalarlo: [GUIA_ENTORNO.md](GUIA_ENTORNO.md) §3 |
+| **GitHub** | Una **web** donde se guardan repositorios de git y se trabaja sobre ellos entre varios. Es una empresa, de 2008, hoy de Microsoft | En internet. Solo hace falta una cuenta |
+
+GitHub está construido **encima** de git, y no es el único: existen GitLab, Codeberg,
+Bitbucket y los GitLab que montan muchas instituciones. El programa de debajo es el mismo
+en todos.
+
+De ahí salen tres consecuencias que son las que de verdad importan hoy:
+
+- **Se puede usar GitHub sin git.** Todo el §4 de esta guía —tu primer *pull request*
+  incluido— se hace desde el navegador, sin instalar nada. Es lo que vamos a hacer en clase.
+- **Y se puede usar git sin GitHub**: historial completo de tu trabajo en tu disco, sin
+  cuenta y sin internet. Para un análisis tuyo que no quieres publicar todavía, sobra.
+- **Tener cuenta de GitHub no instala git, y git no tiene cuentas.** Esto explica una cosa
+  que si no desconcierta: cuando en el §5.1 configures `user.name` y `user.email`, **no
+  estás creando ninguna cuenta ni metiendo ninguna contraseña** — le estás diciendo a un
+  programa de tu ordenador con qué nombre firmar. Que ese correo coincida con el de tu
+  cuenta de GitHub es lo que luego hace que los *commits* salgan como tuyos allí, y es el
+  único punto en que las dos cosas se tocan.
+
+### Y ahora las cinco
+
 Con el repositorio del curso delante, que es el que vas a usar hoy mismo.
 
 | Palabra | Qué es | En este curso |
@@ -185,8 +214,11 @@ Todo lo de arriba se hace desde el navegador, y para un cambio de una línea el 
 **es la herramienta correcta**. En local compensa cuando: son varios ficheros a la vez,
 quieres ejecutar lo que cambias antes de proponerlo, o estás sin conexión.
 
-Para eso necesitas git instalado y VS Code, y eso va en la **otra guía del día**:
-[GUIA_ENTORNO.md](GUIA_ENTORNO.md). Aquí solo lo que es de GitHub y no del editor.
+Y para eso necesitas **git instalado en tu ordenador**, que como se vio en el §2 es un
+programa aparte y no viene con la cuenta de GitHub. En Linux y Mac suele estar ya; **en
+Windows no viene puesto**. La instalación está en la otra guía del día,
+[GUIA_ENTORNO.md](GUIA_ENTORNO.md) §3, junto con la de VS Code. Aquí solo lo que es de
+GitHub y no del editor.
 
 ### 5.1. Quién eres: la configuración que sí sigue haciendo falta
 
@@ -312,6 +344,7 @@ botones.
 
 | Lo que ves | Qué pasó | Arreglo |
 |---|---|---|
+| `git: command not found` / VS Code dice que no encuentra git | git no está instalado. La cuenta de GitHub no lo instala (§2) | [GUIA_ENTORNO.md](GUIA_ENTORNO.md) §3. En Windows no viene puesto |
 | `Please tell me who you are` al hacer *commit* | Git no sabe tu nombre ni tu correo | Las dos líneas de `git config --global` (§5.1). Pasa en cada ordenador nuevo |
 | `Support for password authentication was removed` | Metiste la contraseña | Token o SSH (§5.2) |
 | `GH007: Your push would publish a private email address` | Tienes el correo en privado y `user.email` es el real | Pon el `@users.noreply.github.com` de **Settings → Emails** (§5.1) |

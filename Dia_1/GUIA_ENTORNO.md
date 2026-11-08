@@ -300,10 +300,11 @@ misma ventana, git integrado y una terminal dentro.
 ### Primero git, que es otro programa
 
 Esto se olvida siempre, porque en Mac y en Linux suele venir puesto: **git y GitHub no son
-lo mismo, y git hay que instalarlo**. Es el programa que lleva la cuenta de los cambios en
-tu ordenador; GitHub es la web donde se guardan. Sin git instalado, el ciclo de cinco
-comandos de la [guía de GitHub](GUIA_GITHUB.md) §5.3 no tiene con qué ejecutarse, y VS Code
-te dirá que no encuentra git.
+lo mismo, y git hay que instalarlo**. git es el programa que lleva la cuenta de los cambios
+en tu ordenador; GitHub es la web donde se guardan. Están contados uno al lado del otro en
+la [guía de GitHub](GUIA_GITHUB.md) §2. Lo que importa aquí: **tener cuenta de GitHub no
+instala git**, y sin git el ciclo de cinco comandos del §5.3 de esa guía no tiene con qué
+ejecutarse, y VS Code te dirá que no lo encuentra.
 
 | | Cómo |
 |---|---|
