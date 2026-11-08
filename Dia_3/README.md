@@ -38,8 +38,14 @@ una aplicación entera en JavaScript.
 ### 4. Caso práctico: visor de inundación de la marisma (~2 h)
 
 Se monta entre todos una aplicación de verdad, la que se usa en el LAST-EBD reducida a lo
-que cabe en una mañana: selector de fecha, máscara de inundación sobre la ortofoto,
+que cabe en una mañana: selector de fecha, máscara de inundación sobre la imagen de fondo,
 cortinilla para comparar dos fechas y una gráfica de superficie inundada.
+
+Está escrita en los cuatro `app_0*.js`, que se recorren en orden. El contorno del parque sale
+de **WDPA** (World Database on Protected Areas, del WCMC): límite oficial, citable y de una
+línea de código, en lugar de una caja dibujada a mano. Y la gráfica lleva dos series, la
+inundada y la **observada**, porque los desplomes de la primera caen casi siempre donde se
+desploma la segunda: no son bajadas de agua, son días de nubes.
 
 **Segundo caso: [`algas_embalses_base.js`](scripts/algas_embalses_base.js).**
 Afloramientos de algas en embalses andaluces, por si prefieres montar tu aplicación sobre
@@ -52,12 +58,16 @@ nunca se sigue y el que evita descubrir que lo que ibas a envolver no funcionaba
 
 ## 💻 Scripts del día
 
+Los cuatro primeros son **una sola cadena**: el mismo análisis —la lámina de agua de la
+marisma de Doñana— con una interfaz que crece. El análisis no cambia nunca de un script al
+siguiente, y eso es justamente el mensaje del día.
+
 | Script | Qué enseña |
 |---|---|
-| *(por escribir)* `app_01_panel_basico.js` | Panel, etiquetas y un botón que hace algo |
-| *(por escribir)* `app_02_selector_fechas.js` | Selector de fecha y capa que se actualiza |
-| *(por escribir)* `app_03_splitpanel.js` | Comparar dos fechas con cortinilla |
-| *(por escribir)* `app_04_inundacion.js` | El visor completo |
+| [`app_01_panel_basico.js`](scripts/app_01_panel_basico.js) | `ui.Panel`, `ui.Label` y `ui.Button`, `Map.onClick`, y **`evaluate()` en lugar de `getInfo()`**, que es la regla del día |
+| [`app_02_selector_fechas.js`](scripts/app_02_selector_fechas.js) | `ui.Select` alimentado desde el servidor, `ui.Slider` para el umbral, y la capa que se **sustituye** en vez de acumularse. Con el aviso de cobertura: lo que no se vio no es agua que no hay |
+| [`app_03_splitpanel.js`](scripts/app_03_splitpanel.js) | Dos mapas con `ui.Map`, `ui.Map.Linker` para que vayan juntos y `ui.SplitPanel` con cortinilla. Marzo de 2018 contra marzo de 2024 |
+| [`app_04_inundacion.js`](scripts/app_04_inundacion.js) | **El visor completo**: panel lateral, cortinilla, la gráfica del ciclo con la superficie observada encima, leyenda a mano, serie del píxel al pinchar, estado de la aplicación y las cuatro cosas que hay que saber antes de publicar |
 | [`algas_embalses_base.js`](scripts/algas_embalses_base.js) | **El análisis antes de la interfaz**: afloramientos de algas en seis embalses andaluces, con NDCI y FAI sobre la lámina de agua del JRC. Sin un solo `ui.*` |
 
 ## ✅ Ejercicio del día
