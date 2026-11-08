@@ -243,7 +243,7 @@ Ahí van los `conda install`, los `git` y los `solara run` del día 4.
 ### Git, con botones
 
 El icono de las ramitas en la barra lateral (`Ctrl+Shift+G`) es el panel de *Source
-Control*, y es exactamente lo de la [guía de GitHub](GUIA_GITHUB.md) §5.2 con otra cara:
+Control*, y es exactamente lo de la [guía de GitHub](GUIA_GITHUB.md) §5.3 con otra cara:
 
 | En el panel | El comando que es |
 |---|---|

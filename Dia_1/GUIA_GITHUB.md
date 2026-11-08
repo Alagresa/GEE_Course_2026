@@ -188,7 +188,47 @@ quieres ejecutar lo que cambias antes de proponerlo, o estás sin conexión.
 Para eso necesitas git instalado y VS Code, y eso va en la **otra guía del día**:
 [GUIA_ENTORNO.md](GUIA_ENTORNO.md). Aquí solo lo que es de GitHub y no del editor.
 
-### 5.1. La autenticación: tu contraseña no vale
+### 5.1. Quién eres: la configuración que sí sigue haciendo falta
+
+Antes de nada, dos líneas que se escriben **una vez en la vida de cada ordenador**:
+
+```bash
+git config --global user.name  "Tu Nombre"
+git config --global user.email "tu@correo.es"
+```
+
+Sin esto, el primer `git commit` se planta con *«Please tell me who you are»*. No es un
+resto del pasado: **sigue siendo obligatorio y lo será siempre**, porque el nombre y el
+correo se graban dentro de cada *commit* y son los que aparecen en el historial.
+
+Y aquí está la confusión que conviene deshacer: **esto no es tu contraseña ni tiene nada
+que ver con entrar en GitHub.** Git no comprueba nada de lo que pongas ahí; es una
+etiqueta. Lo que sí desapareció es la contraseña para subir código, y de eso va el §5.2.
+La contraseña **nunca** se puso con `git config`.
+
+**El detalle que importa y que casi nadie sabe:** ese correo es lo que hace que un *commit*
+aparezca como tuyo en GitHub, con tu foto y contando en tu perfil. Tiene que ser un correo
+**registrado en tu cuenta**. Si en el §3 activaste «Keep my email addresses private», el que
+hay que poner no es el tuyo de verdad sino el que GitHub te da para eso, de la forma
+`12345678+tuusuario@users.noreply.github.com`, y lo encuentras en **Settings → Emails**. Si
+pones otro, pasa una de dos: o tu correo real queda escrito para siempre en un historial
+público, o GitHub te rechaza el *push* con un error `GH007`.
+
+Ya que estás, estas tres ahorran avisos y disgustos:
+
+```bash
+git config --global init.defaultBranch main   # o seguirá creando ramas "master"
+git config --global pull.rebase false         # o git te regaña cada vez que diverja
+git config --global core.autocrlf input       # en Windows: true
+```
+
+La última es la de los **finales de línea**, y en un grupo con Windows, Mac y Linux a la vez
+es la que evita que un día aparezca un *pull request* con «todas las líneas cambiadas» sin
+que nadie haya tocado nada.
+
+Para ver qué tienes puesto: `git config --global --list`.
+
+### 5.2. La autenticación: tu contraseña no vale
 
 Desde 2021 GitHub **no acepta la contraseña de la cuenta** para operaciones de git. Es el
 primer tropiezo de todo el mundo, así que: dos opciones, elige una.
@@ -249,7 +289,7 @@ Y tres cosas que sí se tuercen alguna vez:
 el navegador. Esto es para cuando trabajes en local, y entonces el token suele ser más
 simple si cambias mucho de máquina, y SSH más cómodo si siempre usas la misma.
 
-### 5.2. El ciclo local, cinco comandos
+### 5.3. El ciclo local, cinco comandos
 
 ```bash
 git clone https://github.com/tuusuario/GEE_Course_2026.git
@@ -272,7 +312,10 @@ botones.
 
 | Lo que ves | Qué pasó | Arreglo |
 |---|---|---|
-| `Support for password authentication was removed` | Metiste la contraseña | Token o SSH (§5.1) |
+| `Please tell me who you are` al hacer *commit* | Git no sabe tu nombre ni tu correo | Las dos líneas de `git config --global` (§5.1). Pasa en cada ordenador nuevo |
+| `Support for password authentication was removed` | Metiste la contraseña | Token o SSH (§5.2) |
+| `GH007: Your push would publish a private email address` | Tienes el correo en privado y `user.email` es el real | Pon el `@users.noreply.github.com` de **Settings → Emails** (§5.1) |
+| Tus *commits* salen en gris, sin tu foto, y no cuentan en tu perfil | El `user.email` no es ninguno de los de tu cuenta de GitHub | Corrígelo con `git config --global user.email` (§5.1). Los ya hechos se quedan así |
 | `Permission denied` al hacer *push* | Intentas subir a mi repositorio, no al tuyo | Haz *fork* y trabaja en tu copia |
 | Has hecho *commit* en `main` sin querer | Falta el `checkout -b` | `git branch mi-rama && git reset --hard origin/main` desde `main`, y sigues en la rama |
 | `This branch is out of date` | `main` avanzó mientras tú trabajabas | *Sync fork* en el navegador, o `git pull origin main` en tu rama |
@@ -307,6 +350,7 @@ datos, Zenodo; para rutas, un fichero de configuración.
 
 | Quiero... | Navegador | Terminal |
 |---|---|---|
+| Decirle a git quién soy (una vez por ordenador) | — | `git config --global user.name "..."` y `user.email "..."` |
 | Copiar un repo ajeno a mi cuenta | *Fork* | — |
 | Traérmelo al ordenador | — | `git clone <url>` |
 | Rama nueva | Selector de rama → escribir nombre | `git checkout -b nombre` |
