@@ -15,6 +15,19 @@ análisis en Python**, para ver que es la misma herramienta con dos pieles.
 
 ## 📚 Contenidos
 
+### 0. Una imagen contra una colección (~30 min)
+
+El escalón que sostiene todo lo demás, y que se da antes de cualquier compuesto:
+
+- El NDVI de **una** imagen: `ee.Image`, una fecha, un número. Lo que ya se sabe hacer.
+- El NDVI de **muchas**: `ee.ImageCollection`, `.map()` y una serie temporal en su lugar.
+- Volver a una imagen con un **reductor**, y que la elección del reductor sea una
+  decisión sobre la pregunta, no un detalle técnico.
+- Por qué la mediana anual de un arrozal no describe nada, que es lo que justifica el
+  bloque siguiente.
+
+Script: [`01_una_imagen_vs_una_coleccion.js`](scripts/01_una_imagen_vs_una_coleccion.js).
+
 ### 1. Colecciones y series temporales (JavaScript, ~2 h)
 
 - Filtrar por fecha, por zona y por metadatos; enmascarar nubes bien.
@@ -50,15 +63,21 @@ análisis en Python**, para ver que es la misma herramienta con dos pieles.
 
 ## 💻 Scripts del día
 
-| Script | Qué enseña |
-|---|---|
-| `ndvi_estacional.js` | Composición estacional |
-| `ndvi_estacional_decades.js` | La misma idea por décadas |
-| `mndwi_decades.js` | MNDWI por décadas sobre las lagunas de Doñana |
-| `07_srtm_munis.js` | Estadísticas zonales por municipio |
-| `GEE_CSIC_2025_1.ipynb` | Introducción a geemap |
-| `series_rejilla_temporal.js` | Rejilla temporal mensual con los huecos declarados, tendencia en unidades/año y estacionalidad armónica |
-| `zonales_reduceregions.ipynb` | `reduceRegions` en Python: reductores combinados y agrupados, salida a pandas y las palancas de memoria y tiempo |
+**En este orden**, que va de lo simple a lo compuesto y cada uno se apoya en el anterior:
+
+| Nº | Script | Qué enseña |
+|---|---|---|
+| 1 | [`01_una_imagen_vs_una_coleccion.js`](scripts/01_una_imagen_vs_una_coleccion.js) | `ee.Image` contra `ee.ImageCollection`, `.map()`, los reductores y qué esconde un compuesto. **El script fundamental** |
+| 2 | [`ndvi_estacional.js`](scripts/ndvi_estacional.js) | Trocear el año y reducir cada trozo: la composición estacional en RGB |
+| 3 | [`ndvi_estacional_decades.js`](scripts/ndvi_estacional_decades.js) | La misma idea estirada a cuarenta años, por décadas |
+| 4 | [`mndwi_decades.js`](scripts/mndwi_decades.js) | MNDWI por décadas con cuatro Landsat combinados: renombrar bandas, escalar antes del índice y por qué `reproject()` no va dentro de un `map()` |
+| 5 | [`series_rejilla_temporal.js`](scripts/series_rejilla_temporal.js) | Rejilla temporal mensual con los huecos declarados, tendencia en unidades/año y estacionalidad armónica |
+| 6 | [`07_srtm_munis.js`](scripts/07_srtm_munis.js) | Estadísticas zonales: `reduceRegion` contra `reduceRegions`, por municipio y por selección |
+| 7 | [`GEE_CSIC_2025_1.ipynb`](scripts/GEE_CSIC_2025_1.ipynb) | Lo mismo en Python: introducción a geemap |
+| 8 | [`zonales_reduceregions.ipynb`](scripts/zonales_reduceregions.ipynb) | `reduceRegions` en Python: reductores combinados y agrupados, salida a pandas y las palancas de memoria y tiempo |
+
+Y en [`extras/`](../extras/) está la versión **a mano** del nº 2, escrita año por año sin
+funciones: sirve para ver de dónde sale el refactorizado.
 
 ## ✅ Ejercicio del día
 
