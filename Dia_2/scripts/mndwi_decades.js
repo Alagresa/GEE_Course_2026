@@ -8,6 +8,13 @@
 // 1. CONFIGURACIÓN INICIAL
 // ----------------------------------------------------------------------------
 
+// La zona de estudio, definida en código para que el script corra al pegarlo.
+// En la versión original esto eran DOS geometrías dibujadas, `extent` y
+// `region`, que hacían lo mismo: una para filtrar la colección y otra para
+// recortar. Se queda una sola.
+var extent = ee.Geometry.Rectangle([-6.55, 36.80, -6.05, 37.25]);  // marisma del Guadalquivir
+var region = extent;
+
 // Definir el rango temporal completo del análisis
 var fechaInicio = '1984-01-01';
 var fechaFin = '2023-12-31';
@@ -57,6 +64,18 @@ function seleccionarBandasColeccion(imagen, satelite) {
 /**
  * Aplica los coeficientes de calibración para convertir valores digitales
  * a reflectancia de superficie según documentación de Landsat Collection 2
+ *
+ * ESTE PASO NO ES OPCIONAL, Y ES LA TRAMPA DE TODO EL SCRIPT. Uno piensa: «el
+ * MNDWI es un cociente normalizado, el factor de escala se cancela, puedo
+ * calcularlo sobre los enteros». El factor sí se cancela. **El offset de −0.2
+ * no**, porque sobrevive en el denominador:
+ *
+ *   sin escalar:  (G − S) / (G + S)
+ *   escalado:     (G − S) / (G + S − 14545)
+ *
+ * Son dos números distintos, los dos entre −1 y 1, los dos con pinta de MNDWI,
+ * y ninguna función se queja. Si el umbral de agua se calibró con uno y se
+ * aplica al otro, el agua sale donde no está.
  */
 function aplicarCoeficientesReflectividad(imagen) {
   return imagen.multiply(0.0000275).add(-0.2)
@@ -72,10 +91,18 @@ function calcularMNDWI(imagen) {
   var mndwi = imagen.normalizedDifference(['green', 'swir1'])
     .rename('MNDWI');
   
-  // Recortar al área de estudio y reproyectar
-  return mndwi.clip(extent)
-    .select('MNDWI')
-    .reproject({crs: crs, scale: escala});
+  // Recortar al área de estudio. Y NADA MÁS.
+  //
+  // Aquí había un `.reproject({crs: crs, scale: escala})`, y se ha quitado a
+  // propósito. `reproject()` dentro de una función que se mapea sobre la
+  // colección obliga a Earth Engine a calcular en esa proyección y a esa escala
+  // en todas partes, al zoom que sea: se pierde la pirámide de resoluciones,
+  // que es justo lo que hace rápido a GEE. El mapa pasa de segundos a minutos,
+  // o da «User memory limit exceeded» con los mismos datos.
+  //
+  // El CRS y la escala se fijan EN LA EXPORTACIÓN, donde `crs` y `escala` se
+  // siguen usando. Ahí sí.
+  return mndwi.clip(extent).select('MNDWI');
 }
 
 /**
@@ -100,11 +127,13 @@ function aplicarMetodoEstadistico(coleccion) {
     resultado = coleccion.max();
     print('Método aplicado: MÁXIMO');
   } 
-  else if (metodoEstadistico === 'percentile95') {
-    // Percentil 95: elimina outliers extremos pero mantiene valores altos
+  else if (metodoEstadistico === 'percentile98') {
+    // Percentil 98: quita los valores extremos pero mantiene los altos, que es
+    // lo que interesa cuando se busca la máxima extensión de agua sin que la
+    // decida un solo píxel raro.
     resultado = coleccion.reduce(ee.Reducer.percentile([98]))
       .rename('MNDWI');
-    print('Método aplicado: PERCENTIL 95');
+    print('Método aplicado: PERCENTIL 98');
   } 
   else {
     // Mediana (por defecto): valor central, robusto ante outliers

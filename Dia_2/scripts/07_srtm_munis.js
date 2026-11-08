@@ -8,6 +8,10 @@
 // ========================================
 // SRTM: Shuttle Radar Topography Mission
 // Resolución: 90 metros
+// La zona de estudio, definida en código para que el script corra al pegarlo.
+// Si prefieres dibujarla, borra esta línea y llama igual a la que dibujes.
+var roi = ee.Geometry.Rectangle([-6.55, 36.80, -6.05, 37.25]);  // marisma del Guadalquivir
+
 var dataset = ee.Image('CGIAR/SRTM90_V4');
 
 // Seleccionar la banda de elevación

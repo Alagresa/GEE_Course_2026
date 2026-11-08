@@ -8,6 +8,10 @@
 // 1. CONFIGURACIÓN INICIAL
 // ----------------------------------------------------------------------------
 
+// La zona de estudio, definida en código para que el script corra al pegarlo.
+// Si prefieres dibujarla, borra esta línea y llama igual a la que dibujes.
+var geometry3 = ee.Geometry.Rectangle([-6.55, 36.80, -6.05, 37.25]);  // marisma del Guadalquivir
+
 // Colección de composites de NDVI de Landsat
 var coleccionNDVI = 'LANDSAT/COMPOSITES/C02/T1_L2_32DAY_NDVI';
 
@@ -48,6 +52,11 @@ var mesesEstaciones = {
  * @returns {ee.ImageCollection} - Colección filtrada
  */
 function filtrarPorMeses(coleccion, meses) {
+  // OJO: `calendarRange` toma el PRIMER y el ÚLTIMO mes de la lista y se queda
+  // con el intervalo entre ellos, así que esto solo vale para meses contiguos y
+  // en orden. Si pones el invierno «de verdad» del hemisferio norte —[12, 1, 2]—
+  // el intervalo 12→2 sale VACÍO y sin ningún aviso. Para ese caso hay que
+  // sumar dos filtros con `ee.Filter.or`.
   return coleccion.filter(ee.Filter.calendarRange(meses[0], meses[meses.length - 1], 'month'));
 }
 
@@ -177,7 +186,7 @@ Export.image.toAsset({
   image: ndvi_2014_2024_masked,
   description: 'NDVI_multiestacional_2014_2024_' + metodoEstadistico,
   assetId: 'users/ee-digdgeografo/NDVI_multiestacional_2014_2024_' + metodoEstadistico,
-  region: geometry,
+  region: geometry3,
   scale: 30,
   maxPixels: 1e13
 });

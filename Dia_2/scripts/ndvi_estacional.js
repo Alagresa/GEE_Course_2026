@@ -9,6 +9,10 @@
 // 1. CONFIGURACIÓN INICIAL
 // ----------------------------------------------------------------------------
 
+// La zona de estudio, definida en código para que el script corra al pegarlo.
+// Si prefieres dibujarla, borra esta línea y llama igual a la que dibujes.
+var geometry = ee.Geometry.Rectangle([-6.55, 36.80, -6.05, 37.25]);  // marisma del Guadalquivir
+
 // Año de análisis
 var year = 2024;
 
@@ -94,6 +98,9 @@ Map.centerObject(geometry, 9);
 
 // Parámetros de visualización
 // min y max definen el rango de NDVI a visualizar
+// Solo entran TRES bandas en un RGB, así que otoño se calcula, cuenta para la
+// máscara y no se ve. Para mirarlo, cambia la combinación:
+//   bands: ['otono', 'primavera', 'invierno']
 var parametrosVis = {
   min: 0.1, 
   max: 0.7,

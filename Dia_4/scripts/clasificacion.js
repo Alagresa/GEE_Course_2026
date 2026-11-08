@@ -9,6 +9,10 @@
 // 1. CONFIGURACIÓN INICIAL
 // ----------------------------------------------------------------------------
 
+// La zona de estudio, definida en código para que el script corra al pegarlo.
+// Si prefieres dibujarla, borra esta línea y llama igual a la que dibujes.
+var geometry = ee.Geometry.Rectangle([-6.40, 36.95, -6.10, 37.20]);  // arrozales y marisma
+
 // Año de análisis
 var year = 2020;
 
