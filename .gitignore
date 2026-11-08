@@ -59,8 +59,10 @@ ee-credentials
 *.zip
 *.tar.gz
 
-# Guion de clase, solo para el profesor
+# Guion de clase, solo para el profesor: el fuente, el PDF y el script que lo monta
 GUION.md
+GUION.pdf
+guion_pdf.sh
 
 # Notas del ponente de la presentación: no se publican
 presentacion/notas.js
