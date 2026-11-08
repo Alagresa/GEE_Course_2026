@@ -62,9 +62,22 @@ un segundo y se tira cuando se ha usado.
    actívalo también como correo secundario si usas otro para entrar.
 4. **Verificación en dos pasos.** GitHub la exige a quien sube código, así que tendrás que
    configurarla en algún momento: mejor hoy y con calma que el día 5 con prisa.
-   Ajustes → *Password and authentication* → *Two-factor authentication*. **Ten el móvil
-   a mano en clase** y guarda los códigos de recuperación en algún sitio que no sea el
-   propio móvil.
+   Ajustes → *Password and authentication* → *Two-factor authentication*.
+
+   **No te bloquea hoy**, que es la duda habitual: GitHub no la pide al crear la cuenta ni
+   al abrir un *pull request*. Selecciona a la gente por su actividad, avisa por correo y da
+   **45 días** para configurarla (más una semana de margen con aviso diario). Así que el PR
+   de hoy sale igual.
+
+   Dos consejos que ahorran el disgusto de verdad, que nunca es activarla sino perder el
+   acceso dos años después:
+
+   - **El segundo factor puede vivir en tu gestor de contraseñas** (Bitwarden, 1Password,
+     el del navegador) en vez de en una app del móvil. Sobrevive a perder el teléfono y lo
+     tienes en todas tus máquinas. Una app del móvil también vale, pero entonces lee el
+     punto siguiente dos veces.
+   - **Guarda los códigos de recuperación en un sitio que no sea el móvil.** Son la única
+     puerta de atrás si pierdes el teléfono, y no se pueden volver a ver después.
 5. Mientras estás ahí: **Settings → Emails → «Keep my email addresses private»**. Si no,
    tu correo queda visible en el historial público de cada *commit* que hagas.
 
@@ -203,6 +216,38 @@ ssh -T git@github.com
 
 El fichero **`id_ed25519` sin `.pub` es la clave privada y no sale de tu ordenador
 nunca**. Se sube la que termina en `.pub`.
+
+**¿Funciona igual en Windows, Linux y Mac?** Sí. `ssh-keygen` es el mismo programa en los
+tres: Windows 10 y 11 traen OpenSSH de serie, así que vale en PowerShell, en cmd y en Git
+Bash sin instalar nada. Lo único que cambia es cómo leer el fichero para copiarlo:
+
+| | Leer la clave pública | Copiarla al portapapeles |
+|---|---|---|
+| **Linux** | `cat ~/.ssh/id_ed25519.pub` | `xclip -sel clip < ~/.ssh/id_ed25519.pub` (o `wl-copy <` en Wayland) |
+| **Mac** | `cat ~/.ssh/id_ed25519.pub` | `pbcopy < ~/.ssh/id_ed25519.pub` |
+| **Windows** (PowerShell) | `cat ~\.ssh\id_ed25519.pub` | `Get-Content ~\.ssh\id_ed25519.pub \| Set-Clipboard` |
+
+En Windows la carpeta `~/.ssh` es `C:\Users\tu-usuario\.ssh`, y Git Bash usa esa misma,
+así que no hay dos sitios.
+
+Y tres cosas que sí se tuercen alguna vez:
+
+- **La clave es de la máquina, no tuya.** Es el malentendido más común. Si trabajas en el
+  portátil y en el ordenador del despacho, son **dos claves**, y las dos se añaden a la
+  misma cuenta de GitHub — admite todas las que quieras. Copiar la clave privada de una
+  máquina a otra funciona, pero es mala costumbre: si una se compromete, las pierdes todas.
+- **El `ssh-agent`**, que es quien recuerda la contraseña de la clave si le pusiste una. En
+  Linux suele estar en marcha; en **Windows es un servicio parado por defecto** y hay que
+  arrancarlo (`Set-Service ssh-agent -StartupType Automatic` desde PowerShell como
+  administrador, y luego `ssh-add`); en **Mac** conviene `ssh-add --apple-use-keychain` para
+  que lo guarde el llavero. Si le diste a Enter sin contraseña, nada de esto hace falta.
+- **Permisos, solo en Linux y Mac**: si `ssh` se queja de que la clave está demasiado
+  abierta, `chmod 600 ~/.ssh/id_ed25519`. En Windows no pasa, porque usa otro sistema de
+  permisos.
+
+**Nada de esto hace falta para este curso**: el PR del día 1 y el del día 5 se hacen desde
+el navegador. Esto es para cuando trabajes en local, y entonces el token suele ser más
+simple si cambias mucho de máquina, y SSH más cómodo si siempre usas la misma.
 
 ### 5.2. El ciclo local, cinco comandos
 
