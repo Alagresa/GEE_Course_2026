@@ -133,8 +133,10 @@ th { font-family: var(--display); font-size: 21px; text-transform: uppercase;
 td strong { color: var(--ink); }
 .rel { color: var(--muted); font-size: 21px; }
 
-.alumnos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 22px; font-size: 24px; }
-.alumnos div { padding: 11px 15px; background: var(--panel); border-radius: 8px; color: var(--ink-2); }
+.alumnos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; font-size: 24px; }
+.alumnos div { padding: 11px 16px; background: var(--panel); border-radius: 8px;
+      color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alumnos .rel { font-size: 20px; }
 .pendiente { border: 2px dashed var(--warn); border-radius: 12px; padding: 24px 28px;
       color: var(--warn); font-size: 23px; }
 
@@ -261,26 +263,26 @@ body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
   <div class="body">
     <p style="margin-bottom:26px;">Dieciséis personas de <strong>once centros</strong> del CSIC, de Canarias al Pirineo. Seis son de la casa.</p>
     <div class="alumnos">
-      <div>Ángela · <span class="rel">IEO Canarias</span></div>
-      <div>Arnau · <span class="rel">IDAEA</span></div>
-      <div>Carmen · <span class="rel">IETcc</span></div>
-      <div>Carmen · <span class="rel">EBD</span></div>
-      <div>Gabriel · <span class="rel">EBD</span></div>
-      <div>Gabriela · <span class="rel">EBD</span></div>
-      <div>Hajar · <span class="rel">EBD</span></div>
-      <div>Héctor · <span class="rel">CIDE</span></div>
-      <div>Jorge · <span class="rel">EBD</span></div>
-      <div>M.ª Victoria · <span class="rel">MNCN</span></div>
-      <div>M.ª del Rocío · <span class="rel">IAS</span></div>
-      <div>Mario · <span class="rel">IREC</span></div>
-      <div>Miguel · <span class="rel">IPE</span></div>
-      <div>Patricia · <span class="rel">IGME</span></div>
-      <div>Pilar · <span class="rel">EBD</span></div>
-      <div>Rotman · <span class="rel">IMEDEA</span></div>
+      <div>Carmen Alonso Ruiz Rivas <span class="rel">· IETcc</span></div>
+      <div>M.ª del Rocío Calderón Madrid <span class="rel">· IAS</span></div>
+      <div>Rotman Alejandro Criollo Manjarrez <span class="rel">· IMEDEA</span></div>
+      <div>Mario Fernández Tizón <span class="rel">· IREC</span></div>
+      <div>M.ª Victoria González Cascón <span class="rel">· MNCN</span></div>
+      <div>Carmen Jiménez Carrasco <span class="rel">· EBD</span></div>
+      <div>Pilar Lafita Narbona <span class="rel">· EBD</span></div>
+      <div>Arnau Lagresa Gardella <span class="rel">· IDAEA</span></div>
+      <div>Héctor Miranda Cebrián <span class="rel">· CIDE</span></div>
+      <div>Jorge Monje Martín <span class="rel">· EBD</span></div>
+      <div>Ángela Mosquera Giménez <span class="rel">· IEO Canarias</span></div>
+      <div>Hajar Oukabli <span class="rel">· EBD</span></div>
+      <div>Gabriel Padilla Rebollo <span class="rel">· EBD</span></div>
+      <div>Gabriela Patricia Romero Olivos <span class="rel">· EBD</span></div>
+      <div>Miguel Sevilla Callejo <span class="rel">· IPE</span></div>
+      <div>Patricia Tena Romero <span class="rel">· IGME</span></div>
     </div>
     <p style="margin-top:30px;">Y la pregunta de la vuelta: <strong>con qué datos trabajas</strong> y <strong>qué te gustaría sacar de aquí</strong>. Lo apunto, y si cabe en el curso, lo metemos.</p>
   </div>
-  <div class="notas">Los apellidos están en el guion, no aquí: esta presentación es pública. Pedir dos frases a cada uno: con qué datos trabaja y qué quiere llevarse. Sirve para decidir qué extras se abren el día 2 y qué caso se monta el día 3. Hay perfiles muy distintos — construcción, agricultura, oceanografía, desertificación, hidrogeología —, así que conviene no dar por supuesto que todos vienen de ecología.</div>
+  <div class="notas">Los acentos están restituidos a mano, porque el listado del Gabinete viene en mayúsculas y sin ellos: comprobar antes de leerlos en voz alta. Pedir dos frases a cada uno: con qué datos trabaja y qué quiere llevarse. Sirve para decidir qué extras se abren el día 2 y qué caso se monta el día 3. Hay perfiles muy distintos — construcción, agricultura, oceanografía, desertificación, hidrogeología —, así que conviene no dar por supuesto que todos vienen de ecología.</div>
 </section>
 
 <!-- 5 ---------------------------------------------------------------- -->
