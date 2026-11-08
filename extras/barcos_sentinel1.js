@@ -10,7 +10,7 @@
  * Y comparar abril-mayo de 2019 con abril-mayo de 2020 enseña la otra mitad:
  * 2020 es el confinamiento. El tráfico se ve caer sin análisis ninguno.
  *
- * Versión de clase (100 líneas). Hay otra mucho más larga y comentada en el
+ * Versión corta (100 líneas). Hay otra mucho más larga y comentada en el
  * repositorio de 2025 (`Dia_3/scripts/sentinel1_ships.js`), con estadísticas y
  * tabla de decibelios, si alguien quiere tirar del hilo.
  */

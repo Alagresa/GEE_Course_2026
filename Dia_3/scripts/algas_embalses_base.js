@@ -15,11 +15,11 @@
  *   4. Dos índices: NDCI (clorofila en el agua) y FAI (algas que flotan).
  *   5. Serie temporal por embalse y mapa de una fecha concreta.
  *
- * LO QUE HAY QUE DECIR EN CLASE, Y ESTÁ EN EL §7: esto detecta pigmento verde
- * en el agua. No distingue cianobacterias de un algar inocuo, y la corrección
- * atmosférica de Sentinel-2 sobre agua continental es mala. Sirve para decir
- * «aquí está pasando algo, id a mirar», que es mucho; no sirve para un informe
- * sanitario.
+ * Y LO QUE NO HACE, que está en el §7 y conviene leer antes que el mapa: esto
+ * detecta pigmento verde en el agua. No distingue cianobacterias de un algar
+ * inocuo, y la corrección atmosférica de Sentinel-2 sobre agua continental es
+ * mala. Sirve para decir «aquí está pasando algo, hay que ir a mirar», que es
+ * mucho; no sirve para un informe sanitario.
  */
 
 // ===========================================================================
@@ -33,12 +33,12 @@
  * 50 ha, reproyectados a EPSG:4326 y con los campos `nombre`, `cuenca`,
  * `codigo` y `area_ha`.
  *
- * Esto es mejor que dibujar cajas a mano por tres razones que conviene decir en
- * clase: el contorno es el real y no un rectángulo, trae los atributos para
- * filtrar (por cuenca, por tamaño), y **es cartografía oficial y citable**, que
- * es la diferencia entre un ejercicio y un trabajo.
+ * Esto es mejor que dibujar cajas a mano por tres razones: el contorno es el
+ * real y no un rectángulo, trae los atributos para filtrar (por cuenca, por
+ * tamaño), y **es cartografía oficial y citable**, que es la diferencia entre un
+ * ejercicio y un trabajo.
  */
-var ASSET_EMBALSES = 'projects/ee-digdgeografo/assets/curso_GEE/embalses_andalucia';
+var ASSET_EMBALSES = 'projects/ndvitimelapse-1553424632859/assets/embalses_andalucia';
 
 var todos = ee.FeatureCollection(ASSET_EMBALSES);
 
@@ -48,7 +48,7 @@ print('Cuencas:', todos.aggregate_array('cuenca').distinct());
 // Los seis con historial de «sopa verde» que se usan de ejemplo. Los nombres
 // son los de la DERA, en mayúsculas y con su puntuación: 'BREÑA II, LA' no es
 // un error, es como viene.
-var seleccion = ['BORNOS', 'ARCOS DE LA FRONTERA', 'IZNAJAR',
+var seleccion = ['BORNOS', 'ARCOS', 'IZNAJAR',
                  'BREÑA II, LA', 'GUADALHORCE', 'GERGAL'];
 
 var embalses = todos.filter(ee.Filter.inList('nombre', seleccion));
@@ -90,7 +90,7 @@ Map.addLayer(embalses.style({color: 'yellow', fillColor: '00000000', width: 2}),
  * Umbral alto (90) = solo el centro, muy seguro, pierde las colas donde
  * justamente se acumulan las algas. Umbral bajo (50) = entra orilla y vegetación
  * palustre, que tiene NDCI altísimo y arruina la media. 80 es el compromiso, y
- * es un parámetro excelente para que lo toquen los alumnos.
+ * es el primer número que merece la pena cambiar para ver qué pasa.
  */
 var umbralAgua = 80;
 
@@ -102,10 +102,17 @@ var aguaPermanente = ee.Image('JRC/GSW1_4/GlobalSurfaceWater')
 Map.addLayer(aguaPermanente, {palette: ['0b3d91']}, 'Agua permanente (JRC)', false);
 
 /*
- * El control de calidad que SÍ hay que hacer: comparar el agua que ve el JRC
- * con la superficie del polígono de la DERA. El polígono es el vaso a cota
- * máxima; el JRC, lo que de verdad se vio con agua. La diferencia **es un
- * resultado**, no un error: mide cuánto del embalse lleva años vacío.
+ * El control de calidad que SÍ hay que hacer: comparar el agua que ve el JRC con
+ * la superficie del polígono de la DERA. El polígono es el vaso **a cota
+ * máxima**; el JRC con `occurrence >= 80` es el **núcleo permanente**, lo que
+ * tuvo agua al menos el 80 % de las veces entre 1984 y 2021.
+ *
+ * El cociente entre los dos no es «lo lleno que está hoy», cuidado: es qué parte
+ * del vaso es lámina estable. El resto se inunda solo en años buenos o ya no se
+ * inunda. Y eso **es un resultado**, no un error del dato.
+ *
+ * Lo que sale, para saber si va bien: Arcos 79 %, Breña II 68 %, Iznájar 47 %,
+ * Guadalhorce 45 %, Gergal 42 % y Bornos 34 %.
  */
 var areaAgua = aguaPermanente.multiply(ee.Image.pixelArea()).divide(1e4)
   .reduceRegions({
@@ -129,10 +136,10 @@ print('Agua permanente (JRC) frente al vaso de la DERA:',
  * con una clase por píxel. Fuera: sombra de nube (3), nube media y alta (8, 9),
  * cirros (10) y nieve (11).
  *
- * NO se usa QA60, que es lo que estaba en los scripts de 2025: desde enero de
- * 2022 esa banda viene VACÍA en los productos con baseline 04.00, así que la
- * máscara parece funcionar y no hace absolutamente nada. Comprobadlo en clase:
- * es un buen ejemplo de código que no da error y aun así está roto.
+ * NO se usa QA60, que era lo habitual hasta hace poco: desde enero de 2022 esa
+ * banda viene VACÍA en los productos con baseline 04.00, así que la máscara
+ * parece funcionar y no hace absolutamente nada. Merece la pena comprobarlo,
+ * porque es un buen ejemplo de código que no da ningún error y está roto.
  */
 function enmascararYEscalar(imagen) {
   var scl = imagen.select('SCL');
@@ -218,6 +225,15 @@ var visFAI = {min: -0.02, max: 0.08, palette: ['000000', '00ff00']};
 // Verano de 2024, que es cuando aparecen los afloramientos.
 var verano = compuestoDe('2024-07-01', '2024-09-30');
 
+/*
+ * Qué debería salir, para comprobar que no se ha roto nada: con 139 escenas en
+ * ese trimestre, el NDCI medio sobre la lámina deja **El Gergal destacado en
+ * +0.144** y el resto entre −0.06 y +0.02. El Gergal es pequeño, abastece a
+ * Sevilla y tiene historial de problemas de calidad del agua, así que el índice
+ * está señalando donde hay que mirar. Tampoco hay que leerlo como más de lo que
+ * es: 0.144 no es una medida de toxicidad, es pigmento (ver §7).
+ */
+
 Map.addLayer(verano.select('NDCI'), visNDCI, 'NDCI verano 2024');
 Map.addLayer(verano.select('FAI'),  visFAI,  'FAI verano 2024', false);
 
@@ -276,7 +292,8 @@ print(serie);
 // ===========================================================================
 
 /*
- * Lo que falta es solo interfaz, y encaja pieza por pieza con lo del bloque 1:
+ * Lo que falta es solo interfaz, y encaja pieza por pieza con los componentes
+ * `ui.*` del primer bloque del día:
  *
  *   - `ui.Select` con los nombres de los embalses → centra el mapa y recalcula
  *     la serie. La lista sale de `todos.aggregate_array('nombre').sort()`, y con
@@ -289,7 +306,7 @@ print(serie);
  *   - `Map.onClick` → NDCI del píxel pinchado y su serie, que es lo que de
  *     verdad pide quien gestiona el embalse.
  *
- * Y el aviso del bloque 2: la serie del §6 recorre un año de escenas de seis
- * embalses. En la aplicación eso NO puede recalcularse en cada clic. O se
+ * Y el aviso de rendimiento: la serie del §6 recorre un año de escenas de seis
+ * embalses. En una aplicación eso NO puede recalcularse en cada clic. O se
  * precalcula a un asset, o se calcula solo para el embalse seleccionado.
  */

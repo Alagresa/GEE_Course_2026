@@ -40,12 +40,12 @@ var ndvi = landsat.map(function(image) {
 
 var maxNDVI = ndvi.max().select('ndvi');
 
-// NOTA para clase: el NDVI es un cociente normalizado, así que los factores de
+// NOTA: el NDVI es un cociente normalizado, así que los factores de
 // escala de la Colección 2 (×0.0000275 − 0.2) no cambian el resultado... casi.
 // El factor se cancela, pero el OFFSET de −0.2 no: sobre números sin escalar el
 // índice sale parecido pero no igual. Aquí, para un máximo anual que solo se
-// mira, da igual; si el número va a un paper, hay que escalar antes.
-// (Es exactamente el fallo que encontré revisando FEZrs para JOSS este verano.)
+// mira, da igual; si el número va a un paper, hay que escalar antes. La nota
+// larga sobre esto está en `Dia_2/scripts/mndwi_decades.js`.
 
 // ---------------------------------------------------------------------------
 // 3. Modelo digital del terreno

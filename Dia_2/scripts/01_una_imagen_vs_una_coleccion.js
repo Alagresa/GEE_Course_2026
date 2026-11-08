@@ -2,7 +2,7 @@
  * Día 2 · 1. Una imagen contra una colección de imágenes
  * Curso «Análisis geoespacial avanzado con Google Earth Engine» — CSIC / EBD, 2026
  *
- * EL SCRIPT FUNDAMENTAL DEL CURSO. Si alguien solo se lleva uno, que sea este.
+ * EL SCRIPT FUNDAMENTAL DEL CURSO. Si te llevas solo uno, que sea este.
  *
  * Todo lo que viene después —compuestos estacionales, series temporales,
  * tendencias, las aplicaciones de los días 3 y 4— es la misma idea repetida:

@@ -80,7 +80,7 @@ Dia_N/
 ├── GUIA_*.md     guías de instalación y de uso que se quedan para después del curso
 └── scripts/      el código que se trabaja en clase (.js del Code Editor, .ipynb de Python)
 Dia_1/repaso_js/  anexo opcional, fuera de programa: repaso de JavaScript desde cero
-extras/           comodines de ediciones anteriores, listos para abrir si la clase los pide
+extras/           scripts de ediciones anteriores, fuera de programa, que corren tal cual
 images/           figuras usadas en los README
 CONFIGURACION.md  puesta a punto de la cuenta de Earth Engine, antes de empezar
 environment.yml   el entorno de conda, para quien trabaje en local

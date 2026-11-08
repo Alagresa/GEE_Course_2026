@@ -1,10 +1,10 @@
-# Repaso de JavaScript — el comodín del día 1
+# Repaso de JavaScript
 
 **Esto no entra en el programa.** Es material de apoyo para quien llegue al curso sin
 haber programado antes, y está aquí por una razón concreta: el curso es de nivel
 medio/avanzado, pero los requisitos de la convocatoria dicen *«deseable algo de
-programación, no indispensable»*, así que puede haber gente en el aula que nunca haya
-escrito una línea de código.
+programación, no indispensable»*, así que puede que llegues sin haber escrito nunca una
+línea de código. Si es tu caso, esto es para ti y no te va a costar más de media hora.
 
 Si has programado en cualquier lenguaje —R, Python, MATLAB, IDL, hasta macros de Excel—,
 **no necesitas nada de esto**: lee el script 0 en diagonal, salta al
@@ -13,13 +13,12 @@ sigue el curso.
 
 ## Cómo se usa
 
-No tiene hueco en el horario. Son dos los momentos en que esto se saca:
+No ocupa tiempo de clase, y no hace falta llevarlo hecho. Dos momentos en que viene bien:
 
-- **Antes del curso**, como lectura voluntaria: media hora, los cinco scripts corridos en
-  el Code Editor por tu cuenta.
-- **En clase, solo si hace falta**: si el bloque 4 del día 1 (primeros scripts) se
-  atasca en cosas de JavaScript y no de Earth Engine, el script 0 se proyecta y se
-  recorre en diez minutos, y los demás quedan como deberes.
+- **Antes de empezar**, si ya sabes que la programación no es lo tuyo: los cinco scripts
+  corridos por tu cuenta en el Code Editor, media hora.
+- **Después del primer día**, si te has visto peleando con las llaves y los paréntesis más
+  que con Earth Engine. Esa es la señal de que lo que falta es esto y no lo otro.
 
 Cada fichero se pega entero en el [Code Editor](https://code.earthengine.google.com/) y
 se ejecuta con **Run**. Lo que sale en la consola de la derecha es la respuesta; no hay

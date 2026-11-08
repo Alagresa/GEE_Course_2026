@@ -41,11 +41,11 @@ Se monta entre todos una aplicación de verdad, la que se usa en el LAST-EBD red
 que cabe en una mañana: selector de fecha, máscara de inundación sobre la ortofoto,
 cortinilla para comparar dos fechas y una gráfica de superficie inundada.
 
-**Segundo caso, de repuesto: [`algas_embalses_base.js`](scripts/algas_embalses_base.js).**
-Afloramientos de algas en embalses andaluces. El análisis está escrito y comentado, y la
-interfaz **no**: eso es justamente el ejercicio. Se usa si el visor de inundación sale más
-rápido de lo previsto, o como alternativa para quien prefiera un caso que no sea Doñana.
-El propio script termina con la lista de qué `ui.*` va en cada sitio.
+**Segundo caso: [`algas_embalses_base.js`](scripts/algas_embalses_base.js).**
+Afloramientos de algas en embalses andaluces, por si prefieres montar tu aplicación sobre
+algo que no sea Doñana. El análisis está escrito y comentado, y la interfaz **no**: eso es
+justamente el ejercicio. El propio script termina con la lista de qué `ui.*` va en cada
+sitio y dónde encaja.
 
 Se monta en este orden a propósito —primero el análisis, luego la interfaz—, que es el que
 nunca se sigue y el que evita descubrir que lo que ibas a envolver no funcionaba.
