@@ -115,11 +115,14 @@ pre .c { color: var(--code-dim); font-style: italic; }
    fondo oscuro de la portada queda como un pie deliberado. */
 .logos {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-  background: #fff; padding: 22px 96px;
-  display: flex; align-items: center; gap: 46px;
+  padding: 0 96px 44px;
+  display: flex; align-items: center; justify-content: center; gap: 28px;
 }
-.logos img { height: 74px; width: auto; display: block; }
-.slide.portada.con-logos, .slide.part.con-logos { padding-bottom: 170px; }
+.logos img {
+  height: 74px; width: auto; display: block;
+  background: #fff; border-radius: 14px; padding: 13px 20px; box-sizing: content-box;
+}
+.slide.portada.con-logos, .slide.part.con-logos { padding-bottom: 190px; }
 
 /* Cronograma */
 .crono { display: grid; grid-template-columns: 110px repeat(5, 1fr); gap: 10px; font-size: 21px; }
