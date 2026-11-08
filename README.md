@@ -10,6 +10,10 @@ Gabinete de Formación del CSIC en colaboración con la Estación Biológica de 
 > **programación**, el anexo [`Dia_1/repaso_js/`](Dia_1/repaso_js/) repasa el JavaScript
 > necesario en cinco scripts y media hora.
 
+**▶️ [Ver la presentación del curso](https://digdgeo.github.io/GEE_Course_2026/presentacion/)**
+— las diapositivas de los cinco días, en el navegador. Se mueve con las flechas, `F` para
+pantalla completa.
+
 ---
 
 ## 📋 Información del curso
@@ -81,6 +85,7 @@ Dia_N/
 └── scripts/      el código que se trabaja en clase (.js del Code Editor, .ipynb de Python)
 Dia_1/repaso_js/  anexo opcional, fuera de programa: repaso de JavaScript desde cero
 extras/           scripts de ediciones anteriores, fuera de programa, que corren tal cual
+presentacion/     las diapositivas del curso, publicadas en GitHub Pages
 images/           figuras usadas en los README
 CONFIGURACION.md  puesta a punto de la cuenta de Earth Engine, antes de empezar
 environment.yml   el entorno de conda, para quien trabaje en local

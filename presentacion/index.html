@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis geoespacial avanzado con Google Earth Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ------------------------------------------------------------------
+   Tokens. Mismo esquema que la presentación de SIG Avanzado, con la
+   paleta movida hacia el agua y la vegetación, que es de lo que va esto.
+------------------------------------------------------------------- */
+:root {
+  --ground:   #e8ebe6;
+  --paper:    #f8f9f5;
+  --panel:    #eef1ea;
+  --ink:      #141f1b;
+  --ink-2:    #4d5a53;
+  --muted:    #868e88;
+  --rule:     #d5dad1;
+  --water:    #1f6ab8;
+  --water-lt: #cfe3fa;
+  --veg:      #3f8f3a;
+  --veg-lt:   #d8ecd4;
+  --warn:     #c2410c;
+  --sar:      #7c3aed;
+  --dark:     #121c18;
+  --code-bg:  #16211c;
+  --code-ink: #e3eae4;
+  --code-dim: #8ea097;
+  --code-key: #9ec5f4;
+  --code-str: #efb078;
+  --code-num: #a7d98f;
+
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:    "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:    "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--ground); color: var(--ink);
+  font-family: var(--body); overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Escenario fijo de 1600x900 escalado a la ventana */
+.deck { position: fixed; inset: 0; display: grid; place-items: center; }
+.stage { width: 1600px; height: 900px; position: relative;
+         transform-origin: center center; transform: scale(var(--s, 1)); }
+.slide {
+  position: absolute; inset: 0; background: var(--paper);
+  padding: 72px 96px; display: none; flex-direction: column;
+  box-shadow: 0 2px 40px rgba(20,31,27,.09);
+}
+.slide.is-active { display: flex; }
+
+.eyebrow {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 19px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--rule);
+  padding-bottom: 14px; margin-bottom: 40px; flex: 0 0 auto;
+}
+h1 { font-family: var(--display); font-size: 92px; line-height: 1.02;
+     margin: 0 0 28px; letter-spacing: -.02em; }
+h2 { font-family: var(--display); font-size: 56px; line-height: 1.08;
+     margin: 0 0 32px; letter-spacing: -.015em; }
+h3 { font-family: var(--display); font-size: 30px; margin: 0 0 14px; }
+p, li { font-size: 27px; line-height: 1.5; color: var(--ink-2); }
+ul { margin: 0 0 20px; padding-left: 30px; }
+li { margin-bottom: 14px; }
+li::marker { color: var(--water); }
+strong { color: var(--ink); font-weight: 600; }
+code { font-family: var(--mono); font-size: .92em;
+       background: var(--panel); padding: 2px 7px; border-radius: 5px; color: var(--ink); }
+a { color: var(--water); }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1 1 auto; min-height: 0; }
+.cols.izq { grid-template-columns: 1.15fr .85fr; }
+.body { flex: 1 1 auto; min-height: 0; }
+
+.panel { background: var(--panel); border-radius: 12px; padding: 28px 32px;
+         border-left: 4px solid var(--water); }
+.panel.veg { border-left-color: var(--veg); }
+.panel.warn { border-left-color: var(--warn); }
+.panel.sar { border-left-color: var(--sar); }
+.panel h3 { color: var(--ink); }
+.panel p:last-child, .panel ul:last-child { margin-bottom: 0; }
+
+pre { font-family: var(--mono); background: var(--code-bg); color: var(--code-ink);
+      border-radius: 12px; padding: 26px 30px; font-size: 21px; line-height: 1.62;
+      overflow: hidden; margin: 0 0 20px; }
+pre .k { color: var(--code-key); }
+pre .s { color: var(--code-str); }
+pre .n { color: var(--code-num); }
+pre .c { color: var(--code-dim); font-style: italic; }
+
+/* Portada y separadores de parte */
+.slide.portada, .slide.part { background: var(--dark); color: #eef2ee; justify-content: center; }
+.slide.portada h1 { color: #fff; font-size: 78px; }
+.slide.portada p, .slide.part p { color: #b9c6bf; }
+.slide.portada .meta { display: flex; gap: 56px; margin-top: 46px; font-size: 24px; }
+.slide.portada .meta div span { display: block; color: #8fa198; font-size: 18px;
+      letter-spacing: .07em; text-transform: uppercase; margin-bottom: 6px; }
+.slide.part .num { font-family: var(--display); font-size: 150px; line-height: 1;
+      color: var(--water); margin-bottom: 10px; }
+.slide.part h1 { color: #fff; font-size: 72px; }
+.aviso { margin-top: 44px; display: inline-block; background: var(--water);
+      color: #fff; padding: 14px 24px; border-radius: 10px; font-size: 25px; font-weight: 600; }
+
+/* Cronograma */
+.crono { display: grid; grid-template-columns: 110px repeat(5, 1fr); gap: 10px; font-size: 21px; }
+.crono .dia { font-family: var(--display); font-size: 25px; text-align: center;
+      padding-bottom: 8px; border-bottom: 2px solid var(--rule); }
+.crono .dia small { display: block; color: var(--muted); font-size: 17px;
+      font-family: var(--body); font-weight: 400; }
+.crono .c { background: var(--panel); border-radius: 9px; padding: 14px 15px;
+      border-top: 3px solid var(--water); color: var(--ink-2); line-height: 1.35; }
+.crono .c strong { display: block; margin-bottom: 5px; }
+.crono .c.app { border-top-color: var(--veg); }
+.crono .c.abierto { border-top-color: var(--sar); }
+.crono .hueco { background: repeating-linear-gradient(45deg, var(--panel), var(--panel) 10px, transparent 10px, transparent 20px);
+      border-radius: 9px; display: grid; place-items: center; color: var(--muted);
+      font-size: 18px; text-align: center; padding: 10px; }
+
+/* Tablas y fichas */
+table { width: 100%; border-collapse: collapse; font-size: 23px; }
+th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--rule); }
+th { font-family: var(--display); font-size: 21px; text-transform: uppercase;
+     letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+td strong { color: var(--ink); }
+.rel { color: var(--muted); font-size: 21px; }
+
+.alumnos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 22px; font-size: 24px; }
+.alumnos div { padding: 11px 15px; background: var(--panel); border-radius: 8px; color: var(--ink-2); }
+.pendiente { border: 2px dashed var(--warn); border-radius: 12px; padding: 24px 28px;
+      color: var(--warn); font-size: 23px; }
+
+.cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-bottom: 28px; }
+.cifra { background: var(--panel); border-radius: 12px; padding: 24px 26px; }
+.cifra b { display: block; font-family: var(--display); font-size: 52px;
+      line-height: 1; color: var(--water); margin-bottom: 10px; }
+.cifra span { font-size: 21px; color: var(--ink-2); line-height: 1.35; display: block; }
+
+.enlaces { columns: 2; column-gap: 56px; font-size: 24px; }
+.enlaces p { margin: 0 0 16px; break-inside: avoid; }
+.enlaces b { color: var(--ink); }
+
+/* Cromo: progreso, contador, navegación, notas */
+.cycle { position: absolute; left: 96px; right: 96px; bottom: 34px; height: 3px;
+      background: var(--rule); border-radius: 2px; }
+.cycle .done { position: absolute; left: 0; top: 0; height: 100%;
+      background: var(--water); border-radius: 2px; }
+.cycle .mark { position: absolute; top: -4px; width: 11px; height: 11px;
+      border-radius: 50%; background: var(--water); transform: translateX(-50%); }
+.count { position: fixed; right: 22px; bottom: 16px; font-family: var(--mono);
+      font-size: 14px; color: var(--muted); letter-spacing: .08em; }
+.nav { position: fixed; bottom: 14px; left: 22px; display: flex; gap: 8px; }
+.nav button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--rule);
+      background: rgba(255,255,255,.7); color: var(--ink-2); font-size: 16px; cursor: pointer; }
+.nav button:hover { background: #fff; color: var(--ink); }
+body.sin-nav .nav, body.sin-nav .count { opacity: .25; }
+.deck.on-dark .cycle { background: rgba(255,255,255,.18); }
+.notas { display: none; }
+#notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 36vh; overflow: auto;
+      background: var(--dark); color: #d8e2dc; font-size: 15px; line-height: 1.55;
+      padding: 18px 24px; transform: translateY(101%); transition: transform .18s ease;
+      border-top: 2px solid var(--water); white-space: pre-wrap; }
+#notes.open { transform: none; }
+.ayuda { position: fixed; right: 22px; top: 16px; font-family: var(--mono);
+      font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+<div class="stage" id="stage">
+
+<!-- 1 ---------------------------------------------------------------- -->
+<section class="slide portada" data-title="Portada">
+  <p style="font-size:24px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 20px;">Gabinete de Formación del CSIC · Estación Biológica de Doñana</p>
+  <h1>Análisis geoespacial avanzado con Google Earth Engine</h1>
+  <p style="font-size:30px; max-width:1100px;">De una cuenta en blanco a código tuyo publicado y usable por otra persona.</p>
+  <div class="meta">
+    <div><span>Fechas</span>9, 10, 12, 13 y 16 de noviembre de 2026</div>
+    <div><span>Duración</span>30 horas · 5 sesiones de 9:00 a 15:00</div>
+    <div><span>Nivel</span>Medio / avanzado</div>
+    <div><span>Profesor</span>Diego García Díaz</div>
+  </div>
+  <div><a class="aviso" href="https://code.earthengine.google.com/" target="_blank" rel="noopener">¿Aún sin cuenta de Earth Engine? Hoy la creamos</a></div>
+  <div class="notas">El registro de Earth Engine puede tardar en aprobarse, así que lo primero del día 1 es dejarlo lanzado. El 11 no hay clase por la huelga general: esa sesión se traslada al lunes 16.</div>
+</section>
+
+<!-- 2 ---------------------------------------------------------------- -->
+<section class="slide" id="s-curso" data-title="De qué va el curso">
+  <div class="eyebrow"><span>Presentación</span><span>De qué va</span></div>
+  <h2>No es un curso de introducción</h2>
+  <div class="cols">
+    <div>
+      <p>Esto da por sabido el Code Editor, las colecciones, los filtros y las exportaciones. Si falta esa base, está entera en el <a href="https://github.com/Digdgeo/GEE_Course_2025" target="_blank" rel="noopener">curso de 2025</a>.</p>
+      <p>Aquí vamos a lo que viene después:</p>
+      <ul>
+        <li>Series temporales largas y tendencias.</li>
+        <li>Optimizar: que el análisis <strong>termine</strong>.</li>
+        <li>Python y Earth Engine, no uno u otro.</li>
+        <li>Aplicaciones que usa quien no programa.</li>
+        <li>Publicar el código para que lo use alguien más.</li>
+      </ul>
+    </div>
+    <div class="panel veg">
+      <h3>El hilo de los cinco días</h3>
+      <p>El último día se contribuye a un repositorio de verdad: <code>Ndvi2Gif</code>, que está publicado en JOSS y en PyPI.</p>
+      <p>Para llegar ahí hay que haber pasado por GitHub, por un entorno de Python que funcione y por código que alguien más pueda leer. Eso ordena el curso entero.</p>
+    </div>
+  </div>
+  <div class="notas">Requisitos de la convocatoria: conocimientos básicos de teledetección, deseable algo de programación y no indispensable. Si alguien viene sin programar nada, el repositorio trae un repaso de JavaScript en Dia_1/repaso_js.</div>
+</section>
+
+<!-- 3 ---------------------------------------------------------------- -->
+<section class="slide" id="s-crono" data-title="Cronograma">
+  <div class="eyebrow"><span>Presentación</span><span>Cronograma</span></div>
+  <h2>Cinco sesiones de seis horas</h2>
+  <div class="crono">
+    <div></div>
+    <div class="dia">Día 1<small>lun 9</small></div>
+    <div class="dia">Día 2<small>mar 10</small></div>
+    <div class="dia">Día 3<small>jue 12</small></div>
+    <div class="dia">Día 4<small>vie 13</small></div>
+    <div class="dia">Día 5<small>lun 16</small></div>
+
+    <div class="hueco" style="grid-column:1; grid-row:2 / 4; writing-mode:vertical-rl; transform:rotate(180deg); background:none;">mañana</div>
+
+    <div class="c"><strong>Cuenta y entorno</strong>GEE y Google Cloud · tipos de cuenta y precios</div>
+    <div class="c"><strong>Colecciones</strong>Una imagen contra una colección · compuestos · tendencias</div>
+    <div class="c app"><strong>Componentes</strong><code>ui.*</code>, paneles, eventos y gráficos</div>
+    <div class="c app"><strong>geemap a fondo</strong>Mapas, widgets y cuadros de mando</div>
+    <div class="c abierto"><strong>Issue y fork</strong>Leer código ajeno y proponer un cambio</div>
+
+    <div class="c"><strong>GitHub</strong>Las cinco palabras y tu primer <em>pull request</em></div>
+    <div class="c"><strong>Zonales</strong><code>reduceRegions</code> y optimización</div>
+    <div class="c app"><strong>Publicar</strong>De script a App: quién entra y quién paga</div>
+    <div class="c app"><strong>Clasificar</strong><em>Machine learning</em> en la nube</div>
+    <div class="c abierto"><strong>Pull request</strong>Escribir uno que alguien quiera revisar</div>
+
+    <div class="c"><strong>conda y VS Code</strong>Para cuando el navegador se queda corto</div>
+    <div class="c"><strong>Python</strong>Lo mismo con geemap en Colab</div>
+    <div class="c app"><strong>Caso práctico</strong>Visor de inundación · algas en embalses</div>
+    <div class="c app"><strong>Desplegar</strong>Una app en Python con solara</div>
+    <div class="c abierto"><strong>Revisar</strong>Recibir una revisión sin tomárselo a mal</div>
+  </div>
+  <p class="rel" style="margin-top:26px;">El miércoles 11 no hay clase por la huelga general: esa sesión se traslada al lunes 16.</p>
+  <div class="notas">Seis horas al día con mucha práctica: teoría corta, ejercicio guiado y trabajo propio. Cada día termina con algo entregable.</div>
+</section>
+
+<!-- 4 ---------------------------------------------------------------- -->
+<section class="slide" id="s-alumnos" data-title="Quién está en el aula">
+  <div class="eyebrow"><span>Presentación</span><span>El aula</span></div>
+  <h2>Quién está aquí</h2>
+  <div class="body">
+    <p style="margin-bottom:26px;">Dieciséis personas de <strong>once centros</strong> del CSIC, de Canarias al Pirineo. Seis son de la casa.</p>
+    <div class="alumnos">
+      <div>Ángela · <span class="rel">IEO Canarias</span></div>
+      <div>Arnau · <span class="rel">IDAEA</span></div>
+      <div>Carmen · <span class="rel">IETcc</span></div>
+      <div>Carmen · <span class="rel">EBD</span></div>
+      <div>Gabriel · <span class="rel">EBD</span></div>
+      <div>Gabriela · <span class="rel">EBD</span></div>
+      <div>Hajar · <span class="rel">EBD</span></div>
+      <div>Héctor · <span class="rel">CIDE</span></div>
+      <div>Jorge · <span class="rel">EBD</span></div>
+      <div>M.ª Victoria · <span class="rel">MNCN</span></div>
+      <div>M.ª del Rocío · <span class="rel">IAS</span></div>
+      <div>Mario · <span class="rel">IREC</span></div>
+      <div>Miguel · <span class="rel">IPE</span></div>
+      <div>Patricia · <span class="rel">IGME</span></div>
+      <div>Pilar · <span class="rel">EBD</span></div>
+      <div>Rotman · <span class="rel">IMEDEA</span></div>
+    </div>
+    <p style="margin-top:30px;">Y la pregunta de la vuelta: <strong>con qué datos trabajas</strong> y <strong>qué te gustaría sacar de aquí</strong>. Lo apunto, y si cabe en el curso, lo metemos.</p>
+  </div>
+  <div class="notas">Los apellidos están en el guion, no aquí: esta presentación es pública. Pedir dos frases a cada uno: con qué datos trabaja y qué quiere llevarse. Sirve para decidir qué extras se abren el día 2 y qué caso se monta el día 3. Hay perfiles muy distintos — construcción, agricultura, oceanografía, desertificación, hidrogeología —, así que conviene no dar por supuesto que todos vienen de ecología.</div>
+</section>
+
+<!-- 5 ---------------------------------------------------------------- -->
+<section class="slide part" id="s-d1" data-title="Día 1">
+  <div class="num">1</div>
+  <h1>Puesta a punto profesional</h1>
+  <p style="font-size:30px;">Cuenta, cuotas, GitHub y entorno local. Lunes 9.</p>
+</section>
+
+<!-- 6 ---------------------------------------------------------------- -->
+<section class="slide" data-title="Qué es Earth Engine">
+  <div class="eyebrow"><span>Día 1</span><span>Qué es Earth Engine</span></div>
+  <h2>Un catálogo, unos servidores y una API</h2>
+  <div class="cifras">
+    <div class="cifra"><b>&gt;1000</b><span>colecciones en el catálogo público, de 1972 a anteayer</span></div>
+    <div class="cifra"><b>0</b><span>gigabytes que descargas para empezar a trabajar</span></div>
+    <div class="cifra"><b>2</b><span>sitios donde corre tu código: tu navegador y Google</span></div>
+  </div>
+  <div class="cols">
+    <div>
+      <p>La diferencia con un SIG de escritorio no es la potencia: es <strong>dónde está el dato</strong>. No se baja la imagen, se manda la receta al sitio donde ya está.</p>
+      <p>Eso cambia cómo se escribe el análisis, y es lo que vamos a aprender.</p>
+    </div>
+    <div class="panel">
+      <h3>Lo que trae puesto</h3>
+      <ul>
+        <li>Landsat desde 1972 y Sentinel desde 2014, ya corregidos.</li>
+        <li>Clima, MDE, suelos, población, cartografía global.</li>
+        <li>Reductores, clasificadores, remuestreo, exportación.</li>
+        <li>Tus propios <em>assets</em>, rásters y vectores.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="notas">Enseñar el catálogo de datos en la web y abrir un dataset en el Code Editor desde ahí. Es la vía por la que se descubre el 90 % de lo que se acaba usando.</div>
+</section>
+
+<!-- 7 ---------------------------------------------------------------- -->
+<section class="slide" id="s-precios" data-title="Cuentas y precios">
+  <div class="eyebrow"><span>Día 1</span><span>Cuentas y precios</span></div>
+  <h2>Lo que nadie explica: qué cuenta tienes y cuándo cuesta dinero</h2>
+  <div class="body">
+    <table>
+      <tr><th>Concepto</th><th>Qué es</th><th>Por qué te importa</th></tr>
+      <tr><td><strong>Proyecto de Cloud</strong></td><td>Obligatorio desde 2025 para usar GEE</td><td>La cuota va al <strong>proyecto</strong>, no a tu cuenta de Google</td></tr>
+      <tr><td><strong>Uso no comercial</strong></td><td>Investigación, docencia, ONG, administración</td><td>Gratuito, previa aprobación del registro. Es nuestro caso</td></tr>
+      <tr><td><strong>Uso comercial</strong></td><td>Tarifa por cómputo y por almacenamiento</td><td>Si el resultado es un servicio que se cobra, es este</td></tr>
+      <tr><td><strong>EECU</strong></td><td>La unidad de cómputo de Earth Engine</td><td>Es lo que se consume y lo que se mide. Se puede mirar</td></tr>
+      <tr><td><strong>Cuotas</strong></td><td>Concurrencia y exportaciones simultáneas</td><td><strong>Esto lo notarás antes que el dinero</strong></td></tr>
+    </table>
+    <div class="panel warn" style="margin-top:30px;">
+      <p>Una <em>App</em> publicada corre con <strong>tu</strong> cuota, no con la del visitante. Guárdalo para el día 3.</p>
+    </div>
+  </div>
+  <div class="notas">Enseñar dónde se ve el consumo y cómo se pone una alerta. Y mencionar a qué figura se acoge el CSIC, que es lo que condiciona publicar una App institucional.</div>
+</section>
+
+<!-- 8 ---------------------------------------------------------------- -->
+<section class="slide" data-title="GitHub">
+  <div class="eyebrow"><span>Día 1</span><span>GitHub</span></div>
+  <h2>Cinco palabras y un <em>pull request</em> antes de comer</h2>
+  <div class="cols izq">
+    <div>
+      <table>
+        <tr><td><strong>Repositorio</strong></td><td>la carpeta con su historia entera</td></tr>
+        <tr><td><strong>Commit</strong></td><td>una foto del trabajo, con su por qué</td></tr>
+        <tr><td><strong>Rama</strong></td><td>trabajar sin pisar lo que funciona</td></tr>
+        <tr><td><strong>Fork</strong></td><td>tu copia de algo que no es tuyo</td></tr>
+        <tr><td><strong>Pull request</strong></td><td>«te propongo este cambio»</td></tr>
+      </table>
+      <p style="margin-top:26px;">No es un adorno: el código del curso vive aquí, y el ejercicio del último día es contribuir a un repositorio real.</p>
+    </div>
+    <div class="panel veg">
+      <h3>El PR de hoy</h3>
+      <p>Añadir tu línea a <code>PARTICIPANTES.md</code>, <strong>entero desde el navegador</strong>. Sin git, sin terminal, sin editor. GitHub hace el <em>fork</em> solo.</p>
+      <p>Es un cambio de una línea: lo que importa es haber recorrido el flujo completo una vez.</p>
+    </div>
+  </div>
+  <div class="notas">Dejar bien desde el principio dos cosas: verificación en dos pasos y correo privado. El paso a paso está en Dia_1/GUIA_GITHUB.md, que se queda para después del curso.</div>
+</section>
+
+<!-- 9 ---------------------------------------------------------------- -->
+<section class="slide" data-title="conda y VS Code">
+  <div class="eyebrow"><span>Día 1</span><span>El entorno local</span></div>
+  <h2>El curso se puede seguir sin instalar nada. Esto es para cuando no basta</h2>
+  <div class="cols">
+    <div>
+      <p><strong>Los tres casos en que el navegador se queda corto:</strong></p>
+      <ul>
+        <li>Tus datos no están en la nube.</li>
+        <li>La aplicación del día 4 hay que servirla.</li>
+        <li>Colab se apaga a las doce horas y se lleva lo que no hayas guardado.</li>
+      </ul>
+      <p><strong>Miniconda antes que Anaconda</strong>: debajo de <code>geopandas</code> y <code>rasterio</code> hay GDAL, PROJ y GEOS, que son C y hay que compilar. conda instala los dos lados; <code>pip</code> no sabe de eso.</p>
+    </div>
+    <div>
+      <pre><span class="c"># el entorno del curso, de una vez</span>
+conda env create -f environment.yml
+conda activate gee2026</pre>
+      <div class="panel warn">
+        <h3>El paso que todo el mundo se salta</h3>
+        <p><strong>Elegir el intérprete en VS Code.</strong> Es el origen del <code>ModuleNotFoundError</code> con el paquete instalado y a la vista.</p>
+      </div>
+      <p class="rel" style="margin-top:22px;">Y la única regla que hay que recordar: en <code>base</code> no se trabaja.</p>
+    </div>
+  </div>
+  <div class="notas">github.dev: VS Code completo en el navegador pulsando el punto sobre cualquier repositorio, sin instalar nada. Antigravity es un VS Code por debajo y todo lo anterior le vale.</div>
+</section>
+
+<!-- 10 --------------------------------------------------------------- -->
+<section class="slide" id="s-cliente" data-title="Cliente y servidor">
+  <div class="eyebrow"><span>Día 1</span><span>El concepto que lo explica todo</span></div>
+  <h2>Por qué <code>ee.Number(3)</code> no es un 3</h2>
+  <div class="cols">
+    <div>
+      <pre><span class="k">var</span> a = <span class="n">3</span>;                 <span class="c">// cliente: un número</span>
+<span class="k">var</span> b = ee.Number(<span class="n">3</span>);      <span class="c">// servidor: una receta</span>
+
+print(<span class="k">typeof</span> a);            <span class="c">// number</span>
+print(<span class="k">typeof</span> b);            <span class="c">// object</span>
+
+<span class="c">// Esto NO funciona como esperas:</span>
+<span class="k">if</span> (b.gt(<span class="n">5</span>)) { ... }      <span class="c">// siempre cierto</span>
+
+<span class="c">// Esto sí:</span>
+ee.Algorithms.If(b.gt(<span class="n">5</span>), ... );</pre>
+    </div>
+    <div>
+      <p>Todo lo que empieza por <code>ee.</code> vive en los servidores de Google. En tu navegador solo hay <strong>la receta</strong>, no el resultado.</p>
+      <p>De ahí salen las tres reglas que gobiernan el curso:</p>
+      <div class="panel">
+        <ul>
+          <li>Nada se calcula hasta que algo lo pide: pintar, imprimir o exportar.</li>
+          <li><code>getInfo()</code> trae el dato a tu máquina, y es caro. Casi siempre se puede evitar.</li>
+          <li>Un <code>for</code> sobre una colección es el error más caro que se puede cometer aquí. Se usa <code>.map()</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="notas">Enseñar el Profiler con y sin getInfo en el mismo cálculo: el script 02_coste_getinfo.js está para eso. Esta diapositiva es la que hay que repetir el resto de la semana.</div>
+</section>
+
+<!-- 11 --------------------------------------------------------------- -->
+<section class="slide part" id="s-d2" data-title="Día 2">
+  <div class="num">2</div>
+  <h1>El Code Editor a fondo, y lo mismo en Python</h1>
+  <p style="font-size:30px;">Colecciones, series, zonales y optimización. Martes 10.</p>
+</section>
+
+<!-- 12 --------------------------------------------------------------- -->
+<section class="slide" id="s-imagen" data-title="Una imagen, una colección">
+  <div class="eyebrow"><span>Día 2</span><span>El escalón</span></div>
+  <h2>Una imagen contra una colección de imágenes</h2>
+  <div class="cols">
+    <div>
+      <pre><span class="c">// UNA imagen: una fecha, un número</span>
+<span class="k">var</span> ndvi = img.normalizedDifference([<span class="s">'B8'</span>, <span class="s">'B4'</span>]);
+
+<span class="c">// MUCHAS: la misma cuenta, todas las fechas</span>
+<span class="k">var</span> serie = coleccion.map(<span class="k">function</span> (img) {
+  <span class="k">return</span> img.addBands(
+    img.normalizedDifference([<span class="s">'B8'</span>, <span class="s">'B4'</span>]));
+});</pre>
+      <p>Hasta la primera línea no hay nada que no se pueda hacer en QGIS. La segunda no tiene equivalente en un SIG de escritorio.</p>
+    </div>
+    <div class="panel veg">
+      <h3>Y la pregunta que lo abre todo</h3>
+      <p>¿Y si esa imagen tenía nubes? ¿Y si ese día no representa el año? ¿Y si quiero cuarenta años?</p>
+      <p>Con una imagen no hay respuesta. Hay que <strong>cambiar de objeto</strong>, y ese cambio es el curso entero.</p>
+    </div>
+  </div>
+  <div class="notas">Script 01_una_imagen_vs_una_coleccion.js. El identificador de la escena se le pide a la colección con sort y first, no se escribe a mano. Y ojo al tropiezo: divide(10000) devuelve una imagen nueva y se deja la fecha por el camino.</div>
+</section>
+
+<!-- 13 --------------------------------------------------------------- -->
+<section class="slide" data-title="Reductores">
+  <div class="eyebrow"><span>Día 2</span><span>Reductores</span></div>
+  <h2>Volver a una imagen es elegir una pregunta</h2>
+  <div class="body">
+    <table>
+      <tr><th>Reductor</th><th>Qué contesta</th><th>Cuándo</th></tr>
+      <tr><td><code>median()</code></td><td>el año «típico»</td><td>por defecto: es lo más robusto a nubes</td></tr>
+      <tr><td><code>max()</code></td><td>cuándo la planta pudo más</td><td>fenología, y detección de barcos con radar</td></tr>
+      <tr><td><code>min()</code></td><td>el suelo desnudo, el agua</td><td>cotas, láminas mínimas</td></tr>
+      <tr><td><code>percentile([98])</code></td><td>el máximo sin el píxel raro</td><td>cuando <code>max()</code> te lo decide un solo día malo</td></tr>
+      <tr><td><code>count()</code></td><td><strong>cuántas escenas válidas hay</strong></td><td><strong>siempre, y nadie lo mira</strong></td></tr>
+    </table>
+    <div class="panel warn" style="margin-top:30px;">
+      <p><code>count()</code> explica la mitad de los resultados raros del curso: el número de observaciones cambia de un píxel a otro, porque las nubes no caen igual en todas partes. Mira siempre cuántas tiene el píxel del que hablas.</p>
+    </div>
+  </div>
+  <div class="notas">Enseñar la capa de count en el arrozal y buscar el píxel con menos observaciones. Preguntar en voz alta si alguien se fiaría de su mediana.</div>
+</section>
+
+<!-- 14 --------------------------------------------------------------- -->
+<section class="slide" id="s-estacional" data-title="Compuestos estacionales">
+  <div class="eyebrow"><span>Día 2</span><span>Compuestos estacionales</span></div>
+  <h2>Si la mediana anual borra la estacionalidad, trocea el año</h2>
+  <div class="cols izq">
+    <div>
+      <p>Cuatro trozos, cuatro reducciones, una imagen de cuatro bandas. Las tres primeras puestas como rojo, verde y azul: <strong>el color es la fenología</strong>.</p>
+      <table>
+        <tr><td style="color:#c0392b"><strong>Rojo</strong></td><td>máximo en invierno</td></tr>
+        <tr><td style="color:#27ae60"><strong>Verde</strong></td><td>máximo en primavera</td></tr>
+        <tr><td style="color:#2471a3"><strong>Azul</strong></td><td>máximo en verano</td></tr>
+        <tr><td><strong>Blanco</strong></td><td>activa todo el año: casi siempre regadío</td></tr>
+        <tr><td><strong>Negro</strong></td><td>nunca pasa el umbral: agua, suelo, urbano</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h3>Dos avisos del script</h3>
+      <p>Solo caben <strong>tres</strong> bandas en un RGB, así que otoño se calcula, cuenta para la máscara y no se ve.</p>
+      <p><code>calendarRange(primero, último)</code> asume meses <strong>contiguos y en orden</strong>: un invierno <code>[12, 1, 2]</code> devuelve un intervalo vacío y no da ningún error.</p>
+    </div>
+  </div>
+  <div class="notas">La versión escrita a mano, año por año, está en extras/. Comparar las dos y contar las líneas que hay que tocar para añadir un año es el mejor argumento a favor de escribir funciones.</div>
+</section>
+
+<!-- 15 --------------------------------------------------------------- -->
+<section class="slide" id="s-trampa" data-title="La trampa del escalado">
+  <div class="eyebrow"><span>Día 2</span><span>La trampa</span></div>
+  <h2>El error que no da ningún error</h2>
+  <div class="cols">
+    <div>
+      <p>Los productos de la Colección 2 vienen como enteros. Para pasarlos a reflectividad: <code>valor × 0.0000275 − 0.2</code>.</p>
+      <p>Uno piensa: «es un cociente normalizado, el factor se cancela, puedo calcular el índice sobre los enteros». El factor sí se cancela. <strong>El offset no:</strong></p>
+      <pre><span class="c">// sin escalar</span>
+(G - S) / (G + S)
+
+<span class="c">// escalado</span>
+(G - S) / (G + S - <span class="n">14545</span>)</pre>
+    </div>
+    <div>
+      <div class="panel warn">
+        <p>Dos números distintos, los dos entre −1 y 1, los dos con pinta de índice. <strong>Ninguna función se queja.</strong> Si el umbral de agua se calibró con uno y aplicas el otro, el agua sale donde no está.</p>
+      </div>
+      <h3 style="margin-top:34px;">Y su pariente</h3>
+      <p><code>reproject()</code> dentro de un <code>map()</code> fuerza el cálculo a escala fija en todas partes y tira por tierra la pirámide de resoluciones: de segundos a minutos, o <code>User memory limit exceeded</code> con los mismos datos.</p>
+      <p><strong>El CRS y la escala se fijan en la exportación.</strong></p>
+    </div>
+  </div>
+  <div class="notas">Las dos cosas están documentadas en Dia_2/scripts/mndwi_decades.js, junto al código al que se refieren. El del offset no es teórico: aparece en paquetes publicados y revisados.</div>
+</section>
+
+<!-- 16 --------------------------------------------------------------- -->
+<section class="slide" data-title="Zonales y optimización">
+  <div class="eyebrow"><span>Día 2</span><span>Zonales y optimización</span></div>
+  <h2>Sacar números, y que el cálculo termine</h2>
+  <div class="cols">
+    <div>
+      <h3>Estadísticas zonales</h3>
+      <ul>
+        <li><code>reduceRegion</code>: una zona. <code>reduceRegions</code>: muchas, y <strong>escala</strong>.</li>
+        <li>Reductores combinados y agrupados: media, desviación y percentiles en una pasada.</li>
+        <li><code>scale</code> no es un detalle de la exportación: <strong>manda sobre el resultado</strong>.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Los tres errores que todo el mundo se come</h3>
+      <table>
+        <tr><td><code>User memory limit</code></td><td>sube <code>tileScale</code>, baja la zona</td></tr>
+        <tr><td><code>Computation timed out</code></td><td>precalcula a <em>asset</em></td></tr>
+        <tr><td><code>Too many concurrent</code></td><td>menos exportaciones a la vez</td></tr>
+      </table>
+      <p class="rel" style="margin-top:20px;">Y antes de tocar nada: abrir el <strong>Profiler</strong> y mirar quién se come el tiempo.</p>
+    </div>
+  </div>
+  <div class="notas">El reductor agrupado, mean().group(1), está en extras/ndvi_zonas_mde.js: es de lo más útil y de lo peor documentado de la API. Ojo, el índice del group es posicional.</div>
+</section>
+
+<!-- 17 --------------------------------------------------------------- -->
+<section class="slide" data-title="Python">
+  <div class="eyebrow"><span>Día 2</span><span>Python</span></div>
+  <h2>El mismo análisis, en Python</h2>
+  <div class="cols">
+    <div>
+      <pre><span class="k">import</span> ee, geemap
+ee.Initialize(project=<span class="s">'tu-proyecto'</span>)
+
+m = geemap.Map(center=[<span class="n">37.0</span>, -<span class="n">6.3</span>], zoom=<span class="n">10</span>)
+m.addLayer(ndvi, {<span class="s">'min'</span>: <span class="n">0</span>, <span class="s">'max'</span>: <span class="n">0.8</span>}, <span class="s">'NDVI'</span>)
+m
+
+<span class="c"># y donde el análisis se vuelve cómodo:</span>
+df = geemap.ee_to_df(tabla)</pre>
+    </div>
+    <div>
+      <p><strong>Lo que de verdad cambia</strong> no es la sintaxis, es lo que tienes alrededor: pandas, matplotlib, scikit-learn y tus propios ficheros.</p>
+      <p>Colab como entorno por defecto, sin instalar nada. Y para quien montó el entorno el día 1, el mismo cuaderno desde VS Code.</p>
+      <div class="panel veg">
+        <p>Dos cuadernos: uno de introducción a geemap y otro de <code>reduceRegions</code> hasta pandas, con las palancas de memoria y tiempo.</p>
+      </div>
+    </div>
+  </div>
+  <div class="notas">Insistir en que los objetos ee son los mismos y las reglas de cliente/servidor también: lo que cambia es el entorno de alrededor, no Earth Engine.</div>
+</section>
+
+<!-- 18 --------------------------------------------------------------- -->
+<section class="slide part" id="s-d3" data-title="Día 3">
+  <div class="num">3</div>
+  <h1>Una aplicación desde el Code Editor</h1>
+  <p style="font-size:30px;">De un script a algo que usa quien no programa. Jueves 12.</p>
+</section>
+
+<!-- 19 --------------------------------------------------------------- -->
+<section class="slide" data-title="Componentes ui">
+  <div class="eyebrow"><span>Día 3</span><span>Componentes</span></div>
+  <h2>La interfaz son ocho piezas</h2>
+  <div class="cols">
+    <div>
+      <pre><span class="k">var</span> panel = ui.Panel({style: {width: <span class="s">'320px'</span>}});
+
+<span class="k">var</span> sel = ui.Select({
+  items: [<span class="s">'Bornos'</span>, <span class="s">'Iznájar'</span>, <span class="s">'El Gergal'</span>],
+  onChange: <span class="k">function</span> (nombre) {
+    pintar(nombre);          <span class="c">// y solo eso</span>
+  }
+});
+
+panel.add(ui.Label(<span class="s">'Embalse'</span>)).add(sel);
+ui.root.insert(<span class="n">0</span>, panel);</pre>
+    </div>
+    <div>
+      <p><code>ui.Panel</code>, <code>Label</code>, <code>Button</code>, <code>Select</code>, <code>Slider</code>, <code>Textbox</code>, <code>Chart</code> y <code>SplitPanel</code>. Con eso está todo.</p>
+      <div class="panel warn">
+        <h3>El error clásico</h3>
+        <p>Recalcular la colección entera en cada clic. Una App que tarda 30 segundos <strong>no la usa nadie</strong>.</p>
+        <p>Qué guardar en el estado, qué recalcular y qué precalcular a un <em>asset</em>: eso es el trabajo de verdad.</p>
+      </div>
+    </div>
+  </div>
+  <div class="notas">La cortinilla de ui.SplitPanel para comparar dos fechas es lo que más impresiona y lo que menos cuesta. El gráfico se alimenta de la serie temporal del día 2.</div>
+</section>
+
+<!-- 20 --------------------------------------------------------------- -->
+<section class="slide" id="s-casos" data-title="Los dos casos">
+  <div class="eyebrow"><span>Día 3</span><span>Caso práctico</span></div>
+  <h2>Dos aplicaciones de verdad</h2>
+  <div class="cols">
+    <div class="panel">
+      <h3>Visor de inundación de la marisma</h3>
+      <p>La que se usa en el LAST-EBD, reducida a lo que cabe en una mañana: selector de fecha, máscara de inundación sobre la ortofoto, cortinilla para comparar dos fechas y una gráfica de superficie inundada.</p>
+    </div>
+    <div class="panel veg">
+      <h3>Algas en embalses andaluces</h3>
+      <p>Seis embalses con historial de «sopa verde». La lámina de agua la pone el JRC; el pigmento, el <strong>NDCI</strong>, que usa la banda de 705 nm <strong>que Landsat no tiene</strong>.</p>
+      <p>El análisis está escrito y comentado; la interfaz <strong>no</strong>: eso es el ejercicio.</p>
+    </div>
+  </div>
+  <p style="margin-top:34px;"><strong>Primero el análisis, después la interfaz.</strong> Es el orden que nunca se sigue, y el que evita descubrir que lo que ibas a envolver no funcionaba.</p>
+  <div class="notas">Los embalses salen de un asset propio hecho con el shapefile de la DERA: contorno real, atributos para filtrar y cartografía oficial citable. Y los límites se cuentan antes de enseñar el mapa: mide pigmento, no especie ni toxicidad.</div>
+</section>
+
+<!-- 21 --------------------------------------------------------------- -->
+<section class="slide part" id="s-d4" data-title="Día 4">
+  <div class="num">4</div>
+  <h1>Una aplicación en Python</h1>
+  <p style="font-size:30px;">geemap, cuadros de mando, <em>machine learning</em> y despliegue. Viernes 13.</p>
+</section>
+
+<!-- 22 --------------------------------------------------------------- -->
+<section class="slide" data-title="Día 4 en detalle">
+  <div class="eyebrow"><span>Día 4</span><span>Contenidos</span></div>
+  <h2>Lo que Python añade</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li><strong>geemap a fondo</strong>: widgets, inspector, capas y división de pantalla.</li>
+        <li><strong>Cuadros de mando</strong>: varias vistas del mismo dato, con pandas por debajo.</li>
+        <li><strong>Clasificación supervisada</strong>: muestreo, <code>smileCart</code> o <em>random forest</em>, partición 70/30 y matriz de confusión. Precisión global, del productor y del usuario.</li>
+        <li><strong>Despliegue con solara</strong>: que la aplicación viva en una URL y no en tu portátil.</li>
+      </ul>
+    </div>
+    <div class="panel veg">
+      <h3>ndvi2gif</h3>
+      <p>Un paquete propio, publicado en <strong>JOSS</strong>, PyPI y conda-forge, que envuelve justo lo que hemos hecho a mano: compuestos estacionales y por periodos, y la animación.</p>
+      <p>Y el repositorio sobre el que se trabaja el último día. Mirarlo hoy como usuario, mañana como quien propone un cambio.</p>
+    </div>
+  </div>
+  <div class="notas">Enlazar la clasificación con los compuestos estacionales del día 2: las bandas de entrada son exactamente esas. Y recordar la matriz de confusión: una precisión global del 95 % con una clase al 20 % sigue siendo un mal clasificador.</div>
+</section>
+
+<!-- 23 --------------------------------------------------------------- -->
+<section class="slide part" id="s-d5" data-title="Día 5">
+  <div class="num">5</div>
+  <h1>Colaborar en abierto</h1>
+  <p style="font-size:30px;">De «el script que me funcionó» a código que usa otra persona. Lunes 16.</p>
+</section>
+
+<!-- 24 --------------------------------------------------------------- -->
+<section class="slide" data-title="El flujo entero">
+  <div class="eyebrow"><span>Día 5</span><span>El flujo</span></div>
+  <h2>Issue, fork, rama, <em>pull request</em>, revisión</h2>
+  <div class="cols izq">
+    <div>
+      <table>
+        <tr><td><strong>1 · Issue</strong></td><td>describir el problema de forma que otro lo reproduzca</td></tr>
+        <tr><td><strong>2 · Fork y rama</strong></td><td>tu copia, y un sitio donde equivocarte sin romper nada</td></tr>
+        <tr><td><strong>3 · El cambio</strong></td><td>pequeño, con una sola intención</td></tr>
+        <tr><td><strong>4 · Pull request</strong></td><td>explicar <em>por qué</em>, no solo <em>qué</em></td></tr>
+        <tr><td><strong>5 · Revisión</strong></td><td>recibirla sin tomárselo a mal, y darla sin hacer daño</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h3>Por qué importa para la ciencia</h3>
+      <ul>
+        <li>Licencia: sin ella, nadie puede usar tu código legalmente.</li>
+        <li>DOI con Zenodo, y <code>CITATION.cff</code> para que te citen bien.</li>
+        <li>La diferencia entre «el script que me funcionó» y código que alguien más puede ejecutar.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="notas">El ejercicio va sobre issues reales marcados como good first issue en Ndvi2Gif. Cada uno abre su PR y revisa el de otra persona.</div>
+</section>
+
+<!-- 25 --------------------------------------------------------------- -->
+<section class="slide" id="s-mundo" data-title="Qué se hace con esto">
+  <div class="eyebrow"><span>Contexto</span><span>Qué se hace con esto</span></div>
+  <h2>Cosas que no existirían sin una plataforma así</h2>
+  <div class="body">
+    <table>
+      <tr><th>Proyecto</th><th>Qué hizo</th></tr>
+      <tr><td><strong>Global Forest Change</strong><br><span class="rel">Hansen et al., Science 2013</span></td><td>La pérdida de bosque del planeta, año a año y a 30 m. Es el dataset que usamos para la máscara tierra/agua</td></tr>
+      <tr><td><strong>Global Surface Water</strong><br><span class="rel">JRC, Nature 2016</span></td><td>Dónde ha habido agua en la Tierra desde 1984, mes a mes. Es el que pone la lámina en el caso de los embalses</td></tr>
+      <tr><td><strong>DEA Coastlines</strong><br><span class="rel">Digital Earth Australia</span></td><td>La línea de costa de un continente entero, recalculada cada año</td></tr>
+      <tr><td><strong>Map of Life</strong></td><td>Distribución de especies cruzada con cobertura del suelo, a escala global</td></tr>
+      <tr><td><strong>Timelapse</strong></td><td>Cuarenta años del planeta en vídeo, en el navegador</td></tr>
+    </table>
+  </div>
+  <div class="notas">Abrir Timelapse en clase y buscar Doñana, o el Mar de Aral. Es la demostración de un minuto de para qué sirve todo esto.</div>
+</section>
+
+<!-- 26 --------------------------------------------------------------- -->
+<section class="slide enlaces" id="s-recursos" data-title="Recursos">
+  <div class="eyebrow"><span>Cierre</span><span>Recursos</span></div>
+  <h2>Para seguir solo</h2>
+  <div class="enlaces body">
+    <p><b>Documentación oficial</b><br><a href="https://developers.google.com/earth-engine" target="_blank" rel="noopener">developers.google.com/earth-engine</a></p>
+    <p><b>Catálogo de datos</b><br><a href="https://developers.google.com/earth-engine/datasets" target="_blank" rel="noopener">earth-engine/datasets</a></p>
+    <p><b>Cliente contra servidor</b><br><a href="https://developers.google.com/earth-engine/guides/client_server" target="_blank" rel="noopener">guides/client_server</a> · la página que hay que leer dos veces</p>
+    <p><b>geemap</b><br><a href="https://geemap.org/" target="_blank" rel="noopener">geemap.org</a> y sus tutoriales en YouTube</p>
+    <p><b>Spatial Thoughts</b><br><a href="https://courses.spatialthoughts.com/end-to-end-gee.html" target="_blank" rel="noopener">End-to-End Earth Engine</a>, de Ujaval Gandhi. El mejor curso gratuito que hay</p>
+    <p><b>Awesome GEE</b><br><a href="https://github.com/giswqs/Awesome-GEE" target="_blank" rel="noopener">github.com/giswqs/Awesome-GEE</a></p>
+    <p><b>Community Catalog</b><br><a href="https://gee-community-catalog.org/" target="_blank" rel="noopener">gee-community-catalog.org</a> · datasets que no están en el catálogo oficial</p>
+    <p><b>Dónde preguntar</b><br>Google Groups de Earth Engine y Stack Exchange de GIS</p>
+    <p><b>ndvi2gif</b><br><a href="https://github.com/Digdgeo/Ndvi2Gif" target="_blank" rel="noopener">github.com/Digdgeo/Ndvi2Gif</a> · el repositorio del último día</p>
+    <p><b>Este curso</b><br><a href="https://github.com/Digdgeo/GEE_Course_2026" target="_blank" rel="noopener">github.com/Digdgeo/GEE_Course_2026</a></p>
+  </div>
+  <div class="notas">Todo el material queda publicado y se puede seguir usando después. Quien quiera la base introductoria, el curso de 2025 está en el mismo sitio.</div>
+</section>
+
+<!-- 27 --------------------------------------------------------------- -->
+<section class="slide portada" data-title="Cierre">
+  <h1>Gracias</h1>
+  <p style="font-size:32px; max-width:1050px;">El material se queda publicado, y las dudas se pueden seguir preguntando donde se preguntan las cosas de código: en un <em>issue</em>.</p>
+  <div class="meta">
+    <div><span>Material</span>github.com/Digdgeo/GEE_Course_2026</div>
+    <div><span>Profesor</span>Diego García Díaz · LAST-EBD, CSIC</div>
+  </div>
+  <div class="notas">Recordar el PR de PARTICIPANTES.md para quien no lo haya hecho, y que las apps publicadas corren con su cuota.</div>
+</section>
+
+</div><!-- /stage -->
+
+<div class="cycle" id="cycle"><div class="done" id="done"></div><div class="mark" id="mark"></div></div>
+</div><!-- /deck -->
+
+<div class="count" id="count">01 / 27</div>
+<div class="nav"><button id="nav-prev" title="Anterior">←</button><button id="nav-next" title="Siguiente">→</button></div>
+<div class="ayuda">← →  ·  N notas  ·  F pantalla completa</div>
+<div id="notes"></div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var deck = document.getElementById('deck');
+  var cycle = document.getElementById('cycle');
+  var notes = document.getElementById('notes');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var titulo = document.title;
+  var i = 0;
+
+  stage.appendChild(cycle);
+
+  function fit() {
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    stage.style.setProperty('--s', s);
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (el, k) { el.classList.toggle('is-active', k === i); });
+    var p = slides.length > 1 ? i / (slides.length - 1) : 0;
+    document.getElementById('mark').style.left = (p * 100) + '%';
+    document.getElementById('done').style.width = (p * 100) + '%';
+    document.getElementById('count').textContent =
+      String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    deck.classList.toggle('on-dark', slides[i].classList.contains('part') ||
+                                     slides[i].classList.contains('portada'));
+    document.body.classList.toggle('sin-nav', slides[i].classList.contains('enlaces'));
+    var nota = slides[i].querySelector('.notas');
+    notes.textContent = nota ? nota.textContent : 'Sin notas en esta diapositiva.';
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+    document.title = titulo + ' · ' + (slides[i].dataset.title || (i + 1));
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (['ArrowRight', 'PageDown', ' '].indexOf(e.key) >= 0) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].indexOf(e.key) >= 0) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'n' || e.key === 'N') notes.classList.toggle('open');
+    else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+      } else if (document.exitFullscreen) document.exitFullscreen();
+    }
+  });
+
+  document.getElementById('nav-prev').addEventListener('click', function () { show(i - 1); });
+  document.getElementById('nav-next').addEventListener('click', function () { show(i + 1); });
+
+  var x0 = null;
+  window.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, {passive: true});
+  window.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  function desdeHash() {
+    var clave = decodeURIComponent(location.hash.slice(1));
+    var n = parseInt(clave, 10);
+    if (String(n) === clave) { show(n - 1); return; }
+    var k = slides.map(function (s) { return s.id; }).indexOf(clave);
+    if (k >= 0) show(k);
+  }
+
+  window.addEventListener('hashchange', desdeHash);
+  window.addEventListener('resize', fit);
+  fit();
+  if (location.hash) desdeHash(); else show(0);
+})();
+</script>
+</body>
+</html>
