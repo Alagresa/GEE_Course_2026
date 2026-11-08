@@ -61,3 +61,6 @@ ee-credentials
 
 # Guion de clase, solo para el profesor
 GUION.md
+
+# Notas del ponente de la presentación: no se publican
+presentacion/notas.js
