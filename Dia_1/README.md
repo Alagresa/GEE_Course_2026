@@ -9,6 +9,11 @@ abierto y los primeros scripts corriendo en el Code Editor.
 Hay dos guías para seguir este día por tu cuenta, y las dos se quedan para después del
 curso: **[GUIA_GITHUB.md](GUIA_GITHUB.md)** y **[GUIA_ENTORNO.md](GUIA_ENTORNO.md)**.
 
+> 🧰 **Si no has programado nunca**, hay un anexo de repaso de JavaScript en
+> [`repaso_js/`](repaso_js/). No entra en el programa y no ocupa tiempo de clase: son
+> cinco scripts para correr por tu cuenta en media hora, antes del curso o después de
+> la primera sesión. Quien venga de R, Python o MATLAB no lo necesita.
+
 ## 🎯 Objetivos
 
 - Tener una cuenta de Earth Engine activa sobre un proyecto propio de Google Cloud.
@@ -100,6 +105,7 @@ Y ya con el pie en el nivel del curso: no «esto es un mapa», sino **cómo pien
 | `01_primeros_pasos.js` | Imagen, colección, filtro, índice y visualización: el camino corto a algo que se ve |
 | `02_coste_getinfo.js` | El mismo cálculo con y sin `getInfo()`, cronometrado y leído con el Profiler |
 | `03_intro_js_client_server.js` | La frontera cliente/servidor |
+| [`repaso_js/`](repaso_js/) | **Anexo opcional**, fuera de programa: repaso de JavaScript en cinco scripts, para quien llegue sin haber programado |
 
 ## ✅ Ejercicio del día
 
@@ -110,6 +116,8 @@ Y ya con el pie en el nivel del curso: no «esto es un mapa», sino **cómo pien
    [GUIA_GITHUB.md](GUIA_GITHUB.md) §4.
 3. **Opcional, y se puede terminar en casa**: el entorno `gee2026` creado y la celda de
    prueba de [GUIA_ENTORNO.md](GUIA_ENTORNO.md) §3 pintando un mapa.
+4. **Solo si te hace falta**: los cinco scripts de [`repaso_js/`](repaso_js/), corridos
+   en el Code Editor. Media hora, y el curso se sigue mucho mejor.
 
 ## 📖 Para profundizar
 
