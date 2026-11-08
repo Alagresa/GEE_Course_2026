@@ -70,11 +70,12 @@ se apaga a las doce horas y se lleva lo que no hayas guardado.
 **Guía del bloque: [GUIA_ENTORNO.md](GUIA_ENTORNO.md)** — instalación y solución de
 problemas, para seguirla en casa con calma.
 
-- **conda y no `pip`**, y por qué: en geoespacial, debajo de `geopandas` y `rasterio` hay
-  GDAL, PROJ y GEOS, que son C y hay que compilar. conda instala los dos lados; `pip` no
-  sabe nada de eso.
-- **De los tres instaladores, Miniforge**: trae conda-forge puesto como canal y es BSD, sin
-  los términos de uso que Anaconda aplica a las organizaciones de más de 200 empleados.
+- **Miniconda** antes que Anaconda, y por qué: en geoespacial, debajo de `geopandas` y
+  `rasterio` hay GDAL, PROJ y GEOS, que son C y hay que compilar. conda instala los dos
+  lados; `pip` no sabe nada de eso.
+- **Lo de Windows, que es la mayoría de la clase**: el **Anaconda Prompt** y no el `cmd`,
+  no trabajar dentro de OneDrive, rutas cortas y sin acentos, y que **git se instala
+  aparte** porque no viene puesto. Todo con su caja en la guía.
 - **Entornos**: qué son, y la única regla que hay que recordar — en `base` no se trabaja.
   El entorno del curso sale de un fichero: `conda env create -f environment.yml`.
 - **VS Code**: instalación, las tres extensiones que hacen falta y ni una más, y **el paso

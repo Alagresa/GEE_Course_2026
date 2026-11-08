@@ -22,9 +22,14 @@ Esto es para **después**, y para tres casos concretos:
 La inversión son unos 40 minutos la primera vez, y vale para todo el Python que escribas
 a partir de ahora, no solo para GEE.
 
+> **Si trabajas en Windows, que es lo más probable**, esta guía te sirve entera: los pasos
+> son los mismos. Pero Windows tiene cuatro o cinco cosas que no le pasan a nadie más, y
+> están marcadas en cajas como esta a lo largo del texto. La primera, y la que más tiempo
+> ahorra, es el **§1: «Windows: lo que solo pasa aquí»**. Léela antes de instalar nada.
+
 ---
 
-## 1. conda: por qué, y cuál de los tres instalar
+## 1. conda: por qué, y Anaconda contra Miniconda
 
 El problema que resuelve conda es viejo y muy concreto: **el geoespacial en Python no es
 Python**. Debajo de `geopandas` y `rasterio` hay librerías escritas en C —GDAL, PROJ,
@@ -35,73 +40,72 @@ sí. `pip` no sabe nada de eso, y de ahí vienen las tardes perdidas con
 conda instala **los dos lados**: el paquete de Python y las librerías de sistema que
 necesita, ya compiladas. Por eso en geoespacial se usa conda y no otra cosa.
 
-Lo que no está tan claro es **cuál de los tres instaladores** usar, porque los tres traen
-el mismo `conda`:
+| | Anaconda | **Miniconda** |
+|---|---|---|
+| Tamaño | ~3 GB | ~100 MB |
+| Trae | Python + 300 librerías + interfaz gráfica | Solo Python + conda |
+| Para | Quien quiere todo puesto y no mirar más | **Quien quiere un entorno por proyecto** |
 
-| | Anaconda | Miniconda | **Miniforge** |
-|---|---|---|---|
-| Tamaño | ~3 GB | ~100 MB | ~100 MB |
-| Trae | Python + 300 librerías + interfaz gráfica | Python + conda | Python + conda + mamba |
-| Canal por defecto | el de Anaconda Inc. | el de Anaconda Inc. | **conda-forge** |
-| Licencia | de Anaconda Inc. | de Anaconda Inc. | **BSD, de la comunidad** |
+**Usa Miniconda.** Lo de Anaconda es cómodo el primer día y estorba el resto: 300
+librerías que no vas a usar, y la tentación de trabajar en el entorno `base`, que es el
+origen del 90 % de los problemas de este mundo. Si ya tienes Anaconda instalado, no lo
+desinstales: `conda` es el mismo y todo lo de aquí funciona igual.
 
-**Instala Miniforge.** Es el instalador que mantiene la propia comunidad de conda-forge, y
-resuelve de una vez las dos cosas que importan aquí:
+Lo único que hay que recordar es **instalar siempre desde `conda-forge`** (`-c conda-forge`,
+§2): es el canal donde está el geoespacial actualizado, y mezclarlo con el canal por
+defecto dentro de un mismo entorno es una de las formas más fiables de romperlo. El
+`environment.yml` del curso ya lo declara, así que dentro del entorno `gee2026` no tienes
+que pensar en esto.
 
-- **El canal.** Miniforge ya viene apuntando a conda-forge, que es donde está el
-  geoespacial bueno y actualizado. Con Miniconda hay que acordarse del `-c conda-forge`
-  cada vez, y mezclar los dos canales dentro de un mismo entorno es una de las formas más
-  fiables de romperlo.
-- **La licencia.** Anaconda cobra por el uso de su repositorio a las organizaciones de más
-  de 200 empleados, y desde julio de 2025 el instalador de Miniconda pide aceptar esos
-  términos por la terminal. Hay una excepción para el ámbito académico, redactada de
-  varias maneras distintas según el año, y el CSIC son más de diez mil personas: no es una
-  discusión que merezca la pena tener cuando el camino alternativo es libre, gratuito y
-  además mejor. Miniforge es BSD y no toca el repositorio de Anaconda.
-
-Y de paso se quita lo peor de Anaconda: 300 librerías que no vas a usar y la tentación de
-trabajar en el entorno `base`, que es el origen del 90 % de los problemas de este mundo.
-
-> **Si ya tienes Anaconda o Miniconda instalado y funcionando, no lo desinstales.** `conda`
-> es el mismo programa y todo lo de esta guía te vale igual; asegúrate solo de que tus
-> entornos declaran `conda-forge` como canal —el `environment.yml` del curso lo hace— y de
-> instalar siempre con `-c conda-forge`.
-
-> Miniforge trae también **mamba**: el mismo conda con el resolvedor de dependencias
-> reescrito en C++ y mucho más rápido (`mamba install` en vez de `conda install`, el resto
-> idéntico). Las versiones nuevas de conda ya llevan ese resolvedor dentro, así que no
-> hace falta usarlo — pero si ves `mamba` en una guía por ahí, es esto.
+> Existe también **mamba**, que es conda reescrito para resolver dependencias mucho más
+> rápido (`mamba install` en vez de `conda install`, mismo resto). Las versiones nuevas de
+> conda ya traen ese resolvedor dentro, así que no hace falta — pero si ves `mamba` en una
+> guía por ahí, es esto.
 
 ### Instalación
 
-Todo sale de la misma página de descargas:
-[github.com/conda-forge/miniforge](https://github.com/conda-forge/miniforge#download).
+Todo sale de la misma página: [anaconda.com/download/success](https://www.anaconda.com/download/success),
+sección **Miniconda Installers**.
 
-**Windows**
+**Windows** — es el caso de la mayoría de la clase, así que con detalle:
 
-1. Descarga
-   [`Miniforge3-Windows-x86_64.exe`](https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe).
-2. Ejecuta el `.exe`. Dos opciones importan:
-   - **Instalar solo para el usuario actual** — así no pide administrador.
-   - **NO marcar «Add Miniforge to my PATH»**. Parece lo cómodo y rompe cosas: deja a conda
+1. Descarga el instalador de **Miniconda, Windows 64-bit**.
+2. Ejecuta el `.exe`. Dos opciones importan, y las dos vienen bien por defecto:
+   - **Instalar solo para el usuario actual** — así no pide administrador, que en un
+     ordenador del trabajo suele ser la diferencia entre poder y no poder.
+   - **NO marcar «Add Miniconda to my PATH»**. Parece lo cómodo y rompe cosas: deja a conda
      por delante del Python del sistema y de cualquier otro que tengas. Usarás el
-     **Miniforge Prompt** en su lugar.
-3. Abre **Miniforge Prompt** desde el menú de inicio. Esa es tu terminal para conda, no el
-   `cmd` normal.
+     **Anaconda Prompt** en su lugar.
+3. Abre **Anaconda Prompt** desde el menú de inicio. Esa es tu terminal para conda, no el
+   `cmd` normal. Es el paso que más despista del día y vuelve a salir dos veces más abajo.
 
-**macOS y Linux**
-
-Las dos líneas son las mismas en los dos sistemas: `uname` resuelve solo el sistema y la
-arquitectura, así que esto vale igual para un Mac con Apple Silicon, uno con Intel, un
-Linux normal y un Linux ARM.
+**macOS**
 
 ```bash
-curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
-bash Miniforge3-$(uname)-$(uname -m).sh
+# Apple Silicon (M1/M2/M3/M4) — la mayoría de los Mac actuales
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+bash Miniconda3-latest-MacOSX-arm64.sh
+
+# Intel
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+bash Miniconda3-latest-MacOSX-x86_64.sh
 ```
 
-Acepta la licencia, deja la ruta por defecto (`~/miniforge3`) y **di sí a que inicialice
+Acepta la licencia, deja la ruta por defecto (`~/miniconda3`) y **di sí a que inicialice
 tu shell**. Después, cierra y abre la terminal.
+
+**Linux**
+
+```bash
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+
+Igual: licencia, ruta por defecto, sí a la inicialización, y reabre la terminal.
+
+> En algún momento —el instalador o la primera vez que uses `conda`— te pedirá **aceptar
+> los términos de uso del repositorio de Anaconda**. Acéptalos y sigue: para uso académico
+> y docente como el de este curso no hay nada que pagar.
 
 **Comprobar**
 
@@ -111,7 +115,45 @@ conda --version
 ```
 
 Si dice «command not found», cierra y abre la terminal otra vez. Si sigue, en Windows
-estás en el `cmd` en lugar del Miniforge Prompt.
+estás en el `cmd` en lugar del Anaconda Prompt.
+
+### Windows: lo que solo pasa aquí
+
+Cuatro cosas. Las cuatro cuestan una tarde la primera vez que te pasan y treinta segundos
+si las sabes antes.
+
+**1. La terminal es el Anaconda Prompt, no el `cmd` ni el PowerShell.** Es el acceso que el
+instalador te deja en el menú de inicio, y es el único sitio donde `conda` está preparado de
+entrada. Si abres PowerShell y escribes `conda activate gee2026`, lo normal es que te diga
+que no conoce `conda`, o —peor, porque despista más— que acepte el comando sin cambiar nada.
+Si quieres usar PowerShell de todas formas, hay que avisarle una vez:
+
+```powershell
+conda init powershell
+# cierra y abre PowerShell. Si se queja de "running scripts is disabled":
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+**2. No trabajes dentro de OneDrive.** En muchos Windows institucionales, `Documentos` y
+`Escritorio` están sincronizados con OneDrive, y eso es el peor sitio posible para un
+entorno de conda o un repositorio de git: son decenas de miles de ficheros pequeños que
+OneDrive intenta subir mientras conda los escribe, y el resultado son instalaciones a medias
+y ficheros bloqueados. Haz una carpeta fuera y trabaja ahí:
+
+```
+C:\Users\tu-usuario\gee2026        ← bien
+C:\Users\tu-usuario\OneDrive\...   ← no
+```
+
+**3. Tildes, espacios y rutas largas.** Si tu carpeta de usuario tiene acentos o espacios
+—`C:\Users\José Martínez`— hay librerías geoespaciales que todavía se atragantan, y además
+Windows corta las rutas a 260 caracteres, que con los entornos de conda se agota antes de lo
+que parece. Las dos se evitan con lo mismo: el entorno y los datos en una ruta corta y sin
+acentos, del tipo `C:\gee` o `C:\Users\tu-usuario\gee2026`.
+
+**4. `conda env create` tarda bastante más que en Mac o Linux.** No es tu conexión: es
+Windows Defender mirando uno por uno los miles de ficheros que se descomprimen. Es normal y
+no hay que tocar nada; solo saber que entre diez y veinte minutos aquí es lo esperable.
 
 ---
 
@@ -248,14 +290,40 @@ Jupyter. Son cosas distintas y se parecen demasiado.
 
 ---
 
-## 3. VS Code
+## 3. git y VS Code
 
 [Visual Studio Code](https://code.visualstudio.com/) es un editor gratuito de Microsoft, y
 es el estándar de hecho: si aprendes uno, que sea este. Lo que te da sobre el Code Editor
 de GEE y sobre Colab: tus ficheros locales, tu entorno de conda, cuadernos y scripts en la
 misma ventana, git integrado y una terminal dentro.
 
-### Instalación
+### Primero git, que es otro programa
+
+Esto se olvida siempre, porque en Mac y en Linux suele venir puesto: **git y GitHub no son
+lo mismo, y git hay que instalarlo**. Es el programa que lleva la cuenta de los cambios en
+tu ordenador; GitHub es la web donde se guardan. Sin git instalado, el ciclo de cinco
+comandos de la [guía de GitHub](GUIA_GITHUB.md) §5.3 no tiene con qué ejecutarse, y VS Code
+te dirá que no encuentra git.
+
+| | Cómo |
+|---|---|
+| **Windows** | [git-scm.com/download/win](https://git-scm.com/download/win). Siguiente, siguiente **con una excepción**: donde pregunta por los finales de línea, deja la primera opción (*Checkout Windows-style, commit Unix-style*), que es lo que hace falta en un grupo con los tres sistemas |
+| **macOS** | `xcode-select --install`, o deja que lo pida el propio VS Code la primera vez |
+| **Linux** | `sudo apt install git` (Debian/Ubuntu) |
+
+```bash
+git --version
+# git version 2.4x.x
+```
+
+> **Windows:** el instalador de git te deja además un **Git Bash** en el menú de inicio, que
+> es una terminal de estilo Linux. Es la que hace que los comandos de los tutoriales de
+> internet funcionen tal cual, y la que necesitas para el `ssh-keygen` de la guía de GitHub.
+> A partir de aquí tienes **dos terminales y cada una sirve para una cosa**: el *Anaconda
+> Prompt* para conda, y *Git Bash* para git. No te pelees por unificarlas hoy; la de VS Code
+> (abajo) resuelve el asunto.
+
+### Instalación de VS Code
 
 - **Windows / macOS**: descarga de [code.visualstudio.com](https://code.visualstudio.com/)
   y siguiente, siguiente. En Windows, marca **«Add to PATH»** (aquí sí) y las dos de
@@ -311,7 +379,19 @@ Abre cualquier `.ipynb` del curso y se ve igual que en Colab, pero local.
 
 `Ctrl+ñ` (en teclado español; `Ctrl+`` ` `` en otros) abre una terminal en la carpeta del
 proyecto, y **con el entorno de conda ya activado** si has seleccionado el intérprete.
-Ahí van los `conda install`, los `git` y los `solara run` del día 4.
+Ahí van los `conda install`, los `git` y los `solara run` del día 4. Y es la respuesta a lo
+de las dos terminales: aquí dentro tienes conda y git a la vez.
+
+> **Windows:** esa terminal abre un PowerShell, y es justo el caso del §1 — si no ves el
+> `(gee2026)` delante del *prompt*, el entorno no está activado aunque VS Code tenga el
+> intérprete bien puesto. Dos arreglos, cualquiera de los dos:
+>
+> - `conda init powershell` una vez, cerrar VS Code y abrirlo.
+> - O cambiarle la terminal por defecto: `Ctrl+Shift+P` → `Terminal: Select Default
+>   Profile` → **Command Prompt**, y reabrir la terminal.
+>
+> Para los comandos de git te vale cualquiera de las dos, y también *Git Bash*, que aparece
+> en esa misma lista de perfiles.
 
 ### Git, con botones
 
@@ -409,11 +489,15 @@ de una versión a otra.
 
 | Lo que ves | Qué pasa | Arreglo |
 |---|---|---|
-| `conda: command not found` | La terminal no conoce conda | Reabre la terminal. En Windows, usa el **Miniforge Prompt** (o el Anaconda Prompt, si vienes de Miniconda) |
+| `conda: command not found` | La terminal no conoce conda | Reabre la terminal. En Windows, usa el **Anaconda Prompt** |
+| **Windows**: `conda activate` no da error pero el *prompt* sigue igual | Estás en PowerShell sin inicializar | `conda init powershell`, o usa el **Anaconda Prompt** (§1) |
+| **Windows**: `git: command not found` o VS Code dice que no encuentra git | git no está instalado, que es otro programa | [git-scm.com/download/win](https://git-scm.com/download/win) (§3) |
+| **Windows**: el entorno se crea a medias, o «fichero en uso» | La carpeta está sincronizada con OneDrive | Mueve el trabajo fuera de `Documentos`/`Escritorio` (§1) |
+| **Windows**: errores raros de rutas en `rasterio` o `fiona` | Acentos, espacios o rutas de más de 260 caracteres | Ruta corta y sin acentos, tipo `C:\gee` (§1) |
 | `ModuleNotFoundError` con el paquete instalado | El editor mira a otro Python | `Python: Select Interpreter` → `gee2026` (§3) |
 | El kernel `gee2026` no sale en la lista del cuaderno | Falta `ipykernel` en el entorno | `conda activate gee2026 && conda install ipykernel` |
 | El kernel no sale, pero `ipykernel` está puesto | Lanzaste JupyterLab desde otro entorno | Lánzalo desde `gee2026`, o registra el kernel (§2) |
-| `Solving environment` eterno, o versiones viejas de todo | El entorno mezcla conda-forge y el canal de Anaconda | Declara solo `conda-forge`, o reinstala con **Miniforge** (§1) |
+| `Solving environment` eterno, o versiones viejas de todo | El entorno mezcla conda-forge y el canal por defecto | Declara solo `conda-forge` en el `environment.yml` e instala con `-c conda-forge` (§1) |
 | `conda env create` lleva veinte minutos | Normal la primera vez | Esperar. Si pasa de media hora, `Ctrl+C` y repetir |
 | `PackagesNotFoundError` | El paquete no está en los canales declarados | `conda install -c conda-forge nombre`, y si no está, `pip install nombre` |
 | `EEException: Earth Engine client library not initialized` | Falta `ee.Initialize(project=...)` | Añádelo, con **tu** ID de proyecto |
@@ -440,6 +524,9 @@ peleando con un entorno, bórralo.
 | Abrir JupyterLab en el navegador | `conda activate gee2026 && jupyter lab` |
 | Compartir tu entorno | `conda env export --from-history > environment.yml` |
 | Terminal dentro de VS Code | `Ctrl+ñ` |
+| **Windows**: terminal para conda | **Anaconda Prompt** (no el `cmd`) |
+| **Windows**: conda en PowerShell | `conda init powershell`, una vez |
+| **Windows**: comprobar que git está | `git --version` |
 | Panel de git | `Ctrl+Shift+G` |
 | VS Code en el navegador | `github.com` → `github.dev` en la URL, o pulsar `.` sobre el repo |
 
@@ -448,8 +535,7 @@ peleando con un entorno, bórralo.
 ## 7. Para profundizar
 
 - [Guía de conda](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html) · [Hoja de referencia oficial](https://docs.conda.io/projects/conda/en/stable/user-guide/cheatsheet.html)
-- [conda-forge](https://conda-forge.org/) — el canal donde está el geoespacial · [Miniforge](https://github.com/conda-forge/miniforge) — el instalador que lo trae puesto
-- [Términos de uso del repositorio de Anaconda](https://www.anaconda.com/legal) — por si tienes que justificar la decisión del §1 en tu centro
+- [conda-forge](https://conda-forge.org/) — el canal donde está el geoespacial
 - [Python en VS Code](https://code.visualstudio.com/docs/python/python-tutorial) · [Cuadernos en VS Code](https://code.visualstudio.com/docs/datascience/jupyter-notebooks)
 - [Instalación de la API de Python de GEE](https://developers.google.com/earth-engine/guides/python_install)
 - [geemap](https://geemap.org/) · [Tutoriales en vídeo](https://geemap.org/tutorials/)
