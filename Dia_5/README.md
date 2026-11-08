@@ -9,7 +9,7 @@ curso con una contribución real, revisada y aceptada.
 
 - Recorrer entero el flujo de contribución: *issue* → *fork* → rama → *commit* → PR.
 - Escribir un *pull request* que alguien quiera revisar.
-- Revisar el PR de otra persona y recibir una revisión sin tomárselo a mal.
+- Revisar el PR de otra persona y contestar a los comentarios que reciba el tuyo.
 - Terminar con **al menos una contribución propia abierta** en un repositorio real.
 
 ## 📚 Contenidos
