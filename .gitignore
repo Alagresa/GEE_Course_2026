@@ -58,3 +58,6 @@ ee-credentials
 # Archivos grandes
 *.zip
 *.tar.gz
+
+# Guion de clase, solo para el profesor
+GUION.md

@@ -6,7 +6,9 @@ Gabinete de Formación del CSIC en colaboración con la Estación Biológica de 
 > Este curso es la continuación de [GEE_Course_2025](https://github.com/Digdgeo/GEE_Course_2025),
 > que era de nivel introductorio. **Aquí se da por sabido lo que allí se enseñaba**: Code
 > Editor, colecciones, filtros, índices y exportaciones. Si vienes sin esa base, repasa
-> aquel repositorio antes de empezar.
+> aquel repositorio antes de empezar. Y si lo que falta no es Earth Engine sino
+> **programación**, el anexo [`Dia_1/repaso_js/`](Dia_1/repaso_js/) repasa el JavaScript
+> necesario en cinco scripts y media hora.
 
 ---
 
@@ -77,6 +79,8 @@ Dia_N/
 ├── README.md     la guía del día: objetivos, contenidos, ejercicios y recursos
 ├── GUIA_*.md     guías de instalación y de uso que se quedan para después del curso
 └── scripts/      el código que se trabaja en clase (.js del Code Editor, .ipynb de Python)
+Dia_1/repaso_js/  anexo opcional, fuera de programa: repaso de JavaScript desde cero
+extras/           comodines de ediciones anteriores, listos para abrir si la clase los pide
 images/           figuras usadas en los README
 CONFIGURACION.md  puesta a punto de la cuenta de Earth Engine, antes de empezar
 environment.yml   el entorno de conda, para quien trabaje en local
