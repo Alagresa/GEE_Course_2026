@@ -303,16 +303,44 @@ Para ver qué tienes puesto: `git config --global --list`.
 ### 5.2. La autenticación: tu contraseña no vale
 
 Desde 2021 GitHub **no acepta la contraseña de la cuenta** para operaciones de git. Es el
-primer tropiezo de todo el mundo, así que: dos opciones, elige una.
+primer tropiezo de todo el mundo. Hay tres caminos, y conviene cogerlos en este orden.
 
-**Token (más fácil de empezar)**
+**1. El navegador (lo normal, y lo que hay que intentar primero)**
+
+No se copia nada ni se guarda nada a mano. La primera vez que hagas `git push`, git abre
+una ventana del navegador, le das a *Authorize* y se acabó.
+
+- **Windows**: no hay que instalar nada. El instalador de Git for Windows trae el **Git
+  Credential Manager**, y la credencial queda guardada en el almacén de Windows.
+- **Linux y Mac**: eso no viene puesto, así que se usa el programa `gh` de GitHub, que
+  tampoco viene puesto y se instala con `sudo apt install gh` o `brew install gh`. Después:
+
+  ```bash
+  gh auth login     # elige: GitHub.com → HTTPS → Login with a web browser
+  ```
+
+  `gh` se deja configurado como ayudante de credenciales y git deja de preguntar.
+
+Si ves **«me pide usuario y contraseña y la contraseña no vale»**, casi nunca es que te
+falte un token: es que se cerró la ventana del navegador, o que ese ayudante no está.
+
+**2. Token, cuando no hay navegador donde corre git**
+
+Un servidor, Colab, una máquina remota por `ssh`: sitios donde no hay navegador que abrir.
 
 Settings → Developer settings → Personal access tokens → *Fine-grained tokens* →
 *Generate new token*. Dale acceso solo a los repositorios que necesites, caducidad de 90
 días, y **cópialo en ese momento**: no se vuelve a mostrar nunca. Cuando git te pida la
 contraseña, pega el token.
 
-**Clave SSH (más cómoda a la larga)**
+Dos avisos: **caduca**, y el día que caduque parecerá que se ha roto git; y un token es una
+contraseña, así que no va en un chat, ni en un cuaderno, ni en un commit.
+
+**3. Clave SSH, para tu ordenador de todos los días**
+
+La que mejor envejece: una vez montada no se toca en años, no caduca y no pregunta nada.
+Pero son cuatro pasos más que los de arriba, así que **no es por donde se empieza** —y en
+algunas redes de centro el puerto 22 está cerrado, lo que se arregla pero cuesta un rato.
 
 ```bash
 ssh-keygen -t ed25519 -C "tu@correo.es"     # Enter a todo
@@ -342,7 +370,7 @@ Bash sin instalar nada. Lo único que cambia es cómo leer el fichero para copia
 En Windows la carpeta `~/.ssh` es `C:\Users\tu-usuario\.ssh`, y Git Bash usa esa misma,
 así que no hay dos sitios.
 
-Y tres cosas que sí se tuercen alguna vez:
+Y cuatro cosas que sí se tuercen alguna vez:
 
 - **La clave es de la máquina, no tuya.** Es el malentendido más común. Si trabajas en el
   portátil y en el ordenador del despacho, son **dos claves**, y las dos se añaden a la
@@ -356,10 +384,25 @@ Y tres cosas que sí se tuercen alguna vez:
 - **Permisos, solo en Linux y Mac**: si `ssh` se queja de que la clave está demasiado
   abierta, `chmod 600 ~/.ssh/id_ed25519`. En Windows no pasa, porque usa otro sistema de
   permisos.
+- **El puerto 22, cerrado en la red del centro.** Pasa en bastantes institutos: `ssh -T
+  git@github.com` se queda colgado y acaba en *Connection timed out*. No es tu clave.
+  GitHub escucha también en el 443, el de las webs, que no lo cierra nadie. En
+  `~/.ssh/config` (o `C:\Users\tu-usuario\.ssh\config`):
+
+  ```
+  Host github.com
+    Hostname ssh.github.com
+    Port 443
+    User git
+  ```
+
+  Y vuelve a probar con `ssh -T git@github.com`.
 
 **Nada de esto hace falta para este curso**: el PR del día 1 y el del día 5 se hacen desde
-el navegador. Esto es para cuando trabajes en local, y entonces el token suele ser más
-simple si cambias mucho de máquina, y SSH más cómodo si siempre usas la misma.
+el navegador. Esto es para cuando trabajes en local, y ahí el resumen es corto: **empieza
+por el navegador**, que en Windows ya viene con git; guarda el token para las máquinas sin
+navegador; y monta la clave SSH cuando sepas que ese ordenador va a ser el tuyo durante
+años. Las tres valen a la vez, y se puede cambiar de una a otra cuando quieras.
 
 ### 5.3. El ciclo local, cinco comandos
 
