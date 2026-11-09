@@ -39,7 +39,7 @@ mucho más que «aprender GEE».
 
 **06.**
 
-**07.**
+**07.** Gabriel Padilla Rebollo · [@gabipr96](https://github.com/gabipr96) · Entender todas las aplicaciones posibles de GEE e intentar aplicarlas en futuros proyectos.
 
 **08.** Miguel Sevilla Callejo `@msevilla00` en redes, en [GitHub](https://github.com/msevilla00) y en [GitLab](https://gitlab.com/msevilla00) - Tenér mas soltura con GEE y aprovechar por ejemplo [Google Satellite Embedding](https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL?hl=es-419#description)
 
