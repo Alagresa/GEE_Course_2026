@@ -26,7 +26,7 @@ mucho más que «aprender GEE».
 
 **00.** Diego García Díaz · [@Digdgeo](https://github.com/Digdgeo) · Que nadie salga de aquí sin una cuenta de GEE que entienda
 
-**01.** Miguel Sevilla Callejo `@msevilla00` en redes, en [GitHub](https://github.com/msevilla00) y en [GitLab](https://gitlab.com/msevilla00)
+**01.** 
 
 **02.**
 
@@ -40,7 +40,7 @@ mucho más que «aprender GEE».
 
 **07.**
 
-**08.**
+**08.** Miguel Sevilla Callejo `@msevilla00` en redes, en [GitHub](https://github.com/msevilla00) y en [GitLab](https://gitlab.com/msevilla00)
 
 **09.**
 
