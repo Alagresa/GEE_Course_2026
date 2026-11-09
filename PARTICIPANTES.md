@@ -47,7 +47,7 @@ mucho más que «aprender GEE».
 
 **10.**
 
-**11.**
+**11.** Arnau Lagresa · [Alagresa] (https://github.com/Alagresa) · Operaciones y extracción de todo tipo de información geoespacial
 
 **12.**
 
