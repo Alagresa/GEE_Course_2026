@@ -27,6 +27,7 @@ mucho más que «aprender GEE».
 **00.** Diego García Díaz · [@Digdgeo](https://github.com/Digdgeo) · Que nadie salga de aquí sin una cuenta de GEE que entienda
 
 **01.** 
+**01.** Patricia Tena Romero. [@patriciatenaromero-eng!](https://github.com/patriciatenaromero-eng) Aprender todo lo que pueda
 
 **02.**
 
