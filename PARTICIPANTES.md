@@ -49,7 +49,7 @@ mucho más que «aprender GEE».
 
 **11.**
 
-**12.**
+**12.** Gabriela Romero · [@gabrielapromero](https://github.com/gabrielapromero) · Análisis de series temporales con Landsat y Sentinel2, y generar una app en GEE para hacer seguimiento de inundaciones
 
 **13.**
 
