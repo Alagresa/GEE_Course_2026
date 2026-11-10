@@ -55,6 +55,6 @@ mucho más que «aprender GEE».
 
 **14.**
 
-**15.**
+**15.** Ángela Mosquera Giménez · [@angelamosquera](https://github.com/angelamosquera) · Familiarizarme con la herramienta GEE y ver cómo puedo aplicarla a mi área trabajo en oceanografía física
 
 **16.**
